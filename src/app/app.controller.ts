@@ -1,23 +1,21 @@
 import { Controller, Get } from '@nestjs/common';
+import { TrackerService } from 'src/tracker/tracker.service';
 import { RegisterDto } from './dto/register.dto'
-import { TaskLogger } from './task-logger';
-import { TrackerService } from './tracker.service';
 
 @Controller()
 export class AppController {
 
   constructor(
-    private readonly trackerService: TrackerService,
-    private readonly logger: TaskLogger
+    private readonly trackerService: TrackerService
   ) {}
 
   @Get()
   async getIndex() {
     const request = new RegisterDto();
     request.url = 'https://github.com/adonisx/adonisx'
-    request.emails = ['i.ozguradem@gmail.com']
+    request.emails = ['i.ozguradem@gmail.com', 'ozgur@ozgurmail.net']
 
-    this.logger.log('Tracker Service is starting to analyze the repository.')
+    this.trackerService.createSubscription(request.url, request.emails)
 
     return {
       status: true,

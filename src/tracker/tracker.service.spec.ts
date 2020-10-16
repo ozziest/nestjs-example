@@ -2,24 +2,22 @@ import { HttpService } from '@nestjs/common';
 import { GitHubServer } from './../git-server/servers/github.server';
 import { GitServerFactory } from './../git-server/git-server.factory';
 import { RegistryFactory } from './../registry/registery.factory';
-import { TaskLogger } from './task-logger';
 import { TrackerService } from './tracker.service';
 import { NpmRegistry } from './../registry/registries/npm.registry';
-import { Dependency } from 'src/registry/dependency.interface';
+import { Dependency } from './../registry/dependency.interface';
+import { RedisService } from './../redis/redis.service';
 
 describe('TrackerService', () => {
   let service: TrackerService;
   let gitServerFactory: GitServerFactory;
   let registryFactory: RegistryFactory;
-  let logger: TaskLogger;
+  let redisService: RedisService;
 
   beforeAll(async () => {
     gitServerFactory = new GitServerFactory(new HttpService())
     registryFactory = new RegistryFactory(new HttpService())
-    logger = new TaskLogger()
-    logger.debug = jest.fn()
-    logger.log = jest.fn()
-    service = new TrackerService(gitServerFactory, registryFactory, logger)
+    redisService = new RedisService()
+    service = new TrackerService(gitServerFactory, registryFactory, redisService)
   });
 
   it('should be able to resolve the repository name"', async () => {
