@@ -19,7 +19,7 @@ import { BullModule } from '@nestjs/bull';
       store: redisStore
     }),
     BullModule.registerQueue({
-      name: 'tasks',
+      name: 'analyze',
       redis: {
         host: 'localhost',
         port: 6379,

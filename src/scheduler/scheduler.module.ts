@@ -9,7 +9,7 @@ import { QueueTriggerService } from './queue-trigger.service';
 @Module({
   imports: [
     BullModule.registerQueue({
-      name: 'tasks',
+      name: 'analyze',
       redis: {
         host: 'localhost',
         port: 6379,

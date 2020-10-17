@@ -8,10 +8,10 @@ import { RegisterDto } from './dto/register.dto'
 export class AppController {
 
   constructor(
-    @InjectQueue('tasks') private taskQueue: Queue,
+    @InjectQueue('analyze') private analysisQueue: Queue,
     private readonly subscriptionService : SubscriptionsService
   ) {
-    this.taskQueue.resume()
+    this.analysisQueue.resume()
   }
 
   @Get()
@@ -25,7 +25,7 @@ export class AppController {
     await this.subscriptionService.subscribeAll(request.url, request.emails)
     // console.log(await this.subscriptionService.findAll())
 
-    const task = await this.taskQueue.add(
+    const task = await this.analysisQueue.add(
       request
     );
 

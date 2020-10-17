@@ -10,7 +10,7 @@ export class QueueTriggerService {
 
   constructor (
     private readonly subscriptionService : SubscriptionsService,
-    @InjectQueue('tasks') private taskQueue: Queue,
+    @InjectQueue('analyze') private analysisQueue: Queue,
   ) {}
 
 
@@ -28,7 +28,7 @@ export class QueueTriggerService {
       const request = new RegisterDto();
       request.url = url
       request.emails = groups[url]
-      await this.taskQueue.add(request);
+      await this.analysisQueue.add(request);
     }
   }
 
