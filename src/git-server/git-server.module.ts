@@ -10,11 +10,11 @@ import { RegistryModule } from 'src/registry/registry.module';
     HttpModule,
     RegistryModule,
     CacheModule.register({
-      store: redisStore
-    })
+      store: redisStore,
+    }),
   ],
   controllers: [],
   providers: [GitServerFactory],
-  exports: [GitServerFactory]
+  exports: [GitServerFactory],
 })
 export class GitServerModule {}

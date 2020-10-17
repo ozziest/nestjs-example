@@ -16,7 +16,7 @@ import { BullModule } from '@nestjs/bull';
   imports: [
     ScheduleModule.forRoot(),
     CacheModule.register({
-      store: redisStore
+      store: redisStore,
     }),
     BullModule.registerQueue({
       name: 'analyze',
@@ -32,10 +32,10 @@ import { BullModule } from '@nestjs/bull';
     LoggerModule,
     MongooseModule.forRoot('mongodb://localhost/test'),
     DataModule,
-    SchedulerModule
+    SchedulerModule,
   ],
   controllers: [AppController],
   providers: [],
-  exports: []
+  exports: [],
 })
 export class AppModule {}

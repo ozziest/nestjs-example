@@ -11,53 +11,53 @@ describe('NpmRegistry', () => {
   let cache;
 
   beforeAll(async () => {
-    httpService = new HttpService()
-    cache = jest.fn()
-    cache.get = jest.fn(() => null)
-    cache.set = jest.fn()
+    httpService = new HttpService();
+    cache = jest.fn();
+    cache.get = jest.fn(() => null);
+    cache.set = jest.fn();
 
-    const logger = new AppLogger()
-    logger.setContext = jest.fn()
-    logger.debug = jest.fn()
-    
-    registry = new NpmRegistry(httpService, logger, cache)
+    const logger = new AppLogger();
+    logger.setContext = jest.fn();
+    logger.debug = jest.fn();
+
+    registry = new NpmRegistry(httpService, logger, cache);
   });
 
   it('should be able convert basic dependency object to Dependency Array', () => {
-    const dependencies : Map<string, string> = new Map<string, string>()
-    dependencies["my-dependency"] = "^1.0.0"
+    const dependencies: Map<string, string> = new Map<string, string>();
+    dependencies['my-dependency'] = '^1.0.0';
 
-    const result = registry.toDependencyArray(dependencies)
+    const result = registry.toDependencyArray(dependencies);
 
-    expect(result.length).toBe(1)
-    expect(result[0].name).toBe("my-dependency")
-    expect(result[0].currentVersion).toBe("1.0.0")
-    expect(result[0].lastVersion).toBeNull()
-    expect(result[0].isOutdated).toBeFalsy()
+    expect(result.length).toBe(1);
+    expect(result[0].name).toBe('my-dependency');
+    expect(result[0].currentVersion).toBe('1.0.0');
+    expect(result[0].lastVersion).toBeNull();
+    expect(result[0].isOutdated).toBeFalsy();
   });
 
   it('should be able resolve dependencies', () => {
-    const dependencies : Map<string, string> = new Map<string, string>()
-    dependencies["my-dependency"] = "^1.0.0"
+    const dependencies: Map<string, string> = new Map<string, string>();
+    dependencies['my-dependency'] = '^1.0.0';
 
-    const devDependencies : Map<string, string> = new Map<string, string>()
-    devDependencies["jest"] = "^1.2.3"
+    const devDependencies: Map<string, string> = new Map<string, string>();
+    devDependencies['jest'] = '^1.2.3';
 
-    const content : NpmStructure = {
-      name: "my-packages",
+    const content: NpmStructure = {
+      name: 'my-packages',
       dependencies,
-      devDependencies
-    }
+      devDependencies,
+    };
 
-    registry.resolveRependencies(content)
+    registry.resolveRependencies(content);
 
-    expect(registry.dependencies.length).toBe(2)
-    expect(registry.dependencies[0].name).toBe("my-dependency")
-    expect(registry.dependencies[0].currentVersion).toBe("1.0.0")
-    expect(registry.dependencies[0].lastVersion).toBeNull()
-    expect(registry.dependencies[0].isOutdated).toBeFalsy()
+    expect(registry.dependencies.length).toBe(2);
+    expect(registry.dependencies[0].name).toBe('my-dependency');
+    expect(registry.dependencies[0].currentVersion).toBe('1.0.0');
+    expect(registry.dependencies[0].lastVersion).toBeNull();
+    expect(registry.dependencies[0].isOutdated).toBeFalsy();
 
-    expect(registry.dependencies[1].name).toBe("jest")
+    expect(registry.dependencies[1].name).toBe('jest');
   });
 
   it('should be able get get outdated dependency list', async () => {
@@ -65,16 +65,12 @@ describe('NpmRegistry', () => {
       data: {
         results: [
           {
-            name: [
-              "jest"
-            ],
-            version: [
-              "3.2.1"
-            ]
-          }
+            name: ['jest'],
+            version: ['3.2.1'],
+          },
         ],
         total: 1,
-        from: 0
+        from: 0,
       },
       status: 200,
       statusText: 'OK',
@@ -84,17 +80,21 @@ describe('NpmRegistry', () => {
 
     const httpServiceListener = jest
       .spyOn(httpService, 'get')
-      .mockImplementation(() => of (axiosResult))
+      .mockImplementation(() => of(axiosResult));
 
-    const result = await registry.resolveOutdates()
+    const result = await registry.resolveOutdates();
 
-    expect(httpServiceListener.mock.calls.length).toBe(2)
-    expect(httpServiceListener.mock.calls[0][0]).toBe('http://npmsearch.com/query?q=name:"my-dependency"')
-    expect(httpServiceListener.mock.calls[1][0]).toBe('http://npmsearch.com/query?q=name:"jest"')
+    expect(httpServiceListener.mock.calls.length).toBe(2);
+    expect(httpServiceListener.mock.calls[0][0]).toBe(
+      'http://npmsearch.com/query?q=name:"my-dependency"',
+    );
+    expect(httpServiceListener.mock.calls[1][0]).toBe(
+      'http://npmsearch.com/query?q=name:"jest"',
+    );
 
-    expect(result.length).toBe(1)
-    expect(result[0].name).toBe('jest')
-    expect(result[0].lastVersion).toBe('3.2.1')
-    expect(result[0].isOutdated).toBeTruthy()
-  })
+    expect(result.length).toBe(1);
+    expect(result[0].name).toBe('jest');
+    expect(result[0].lastVersion).toBe('3.2.1');
+    expect(result[0].isOutdated).toBeTruthy();
+  });
 });

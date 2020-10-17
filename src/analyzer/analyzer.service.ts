@@ -1,28 +1,29 @@
-import { Injectable } from "@nestjs/common";
-import { Dependency } from "./../registry/dependency.interface";
-import { GitServerFactory } from "./../git-server/git-server.factory";
-import { RegistryFactory } from "./../registry/registery.factory";
+import { Injectable } from '@nestjs/common';
+import { Dependency } from './../registry/dependency.interface';
+import { GitServerFactory } from './../git-server/git-server.factory';
+import { RegistryFactory } from './../registry/registery.factory';
 
 @Injectable()
 export class AnalyzerService {
-
-  constructor (
+  constructor(
     private readonly gitServerFactory: GitServerFactory,
-    private readonly registryFactory: RegistryFactory
+    private readonly registryFactory: RegistryFactory,
   ) {}
 
   async analyze(url: string): Promise<Dependency[]> {
-    const result : Dependency[] = []
-    const server = this.gitServerFactory.resolve(url)
+    const result: Dependency[] = [];
+    const server = this.gitServerFactory.resolve(url);
 
-    const registries = this.registryFactory.resolve(await server.getRootFiles())
+    const registries = this.registryFactory.resolve(
+      await server.getRootFiles(),
+    );
 
     for (const registry of registries) {
-      const content = await server.getFileContent(registry.packageFileName)
-      registry.resolveRependencies(content)
-      result.push(...await registry.resolveOutdates())
+      const content = await server.getFileContent(registry.packageFileName);
+      registry.resolveRependencies(content);
+      result.push(...(await registry.resolveOutdates()));
     }
 
-    return result
+    return result;
   }
 }

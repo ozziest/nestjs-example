@@ -5,6 +5,6 @@ import { AppLogger } from './app-logger';
   imports: [],
   controllers: [],
   providers: [AppLogger],
-  exports: [AppLogger]
+  exports: [AppLogger],
 })
 export class LoggerModule {}

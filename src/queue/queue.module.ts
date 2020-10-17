@@ -4,12 +4,9 @@ import { AnalyzerModule } from 'src/analyzer/analyzer.module';
 import { AnalyzeConsumer } from './analyze.consumer';
 
 @Module({
-  imports: [
-    LoggerModule,
-    AnalyzerModule
-  ],
+  imports: [LoggerModule, AnalyzerModule],
   controllers: [],
   providers: [AnalyzeConsumer],
-  exports: [AnalyzeConsumer]
+  exports: [AnalyzeConsumer],
 })
 export class QueueModule {}

@@ -6,20 +6,18 @@ import { AnalyzerService } from 'src/analyzer/analyzer.service';
 
 @Processor('analyze')
 export class AnalyzeConsumer {
-
-  constructor (
+  constructor(
     private readonly analyzerService: AnalyzerService,
-    private readonly logger: AppLogger
+    private readonly logger: AppLogger,
   ) {
-    this.logger.setContext(AnalyzeConsumer.name)
+    this.logger.setContext(AnalyzeConsumer.name);
   }
 
   @Process()
   async transcode(job: Job<RegisterDto>) {
     this.logger.log('Start transcoding...');
-    const result = await this.analyzerService.analyze(job.data.url)
+    const result = await this.analyzerService.analyze(job.data.url);
     this.logger.log('Transcoding completed');
     return result;
   }
- 
 }

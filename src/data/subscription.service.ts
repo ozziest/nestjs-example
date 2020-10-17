@@ -6,58 +6,63 @@ import { Subscription } from './schemas/subscription.schema';
 @Injectable()
 export class SubscriptionsService {
   constructor(
-    @InjectModel(Subscription.name) private readonly model: Model<Subscription>
+    @InjectModel(Subscription.name) private readonly model: Model<Subscription>,
   ) {}
 
   async subscribe(url: string, email: string): Promise<Subscription> {
-    let item = await this.getSubscription(url, email)
+    let item = await this.getSubscription(url, email);
 
     if (item) {
-      return 
+      return;
     }
 
     item = new this.model();
-    item.url = url
-    item.email = email
-    item.createdAt = new Date()
+    item.url = url;
+    item.email = email;
+    item.createdAt = new Date();
     return item.save();
   }
 
-  async getSubscription (url: string, email: string): Promise<Subscription> {
-    return this.model.findOne({
-      url,
-      email
-    }).exec()
+  async getSubscription(url: string, email: string): Promise<Subscription> {
+    return this.model
+      .findOne({
+        url,
+        email,
+      })
+      .exec();
   }
 
-  async getByTimes (startHour: number, endHour: number) : Promise<Subscription[]> {
+  async getByTimes(
+    startHour: number,
+    endHour: number,
+  ): Promise<Subscription[]> {
     return this.model
       .aggregate([
         {
           $project: {
             hour: {
-              $hour: "$createdAt"
+              $hour: '$createdAt',
             },
-            url: "$url",
-            email: "$email",
-            createdAt: "$createdAt"
-          }
-        }, 
+            url: '$url',
+            email: '$email',
+            createdAt: '$createdAt',
+          },
+        },
         {
           $match: {
             hour: {
-              "$gte": startHour,
-              "$lte": endHour
-            }
-          }
-        }
+              $gte: startHour,
+              $lte: endHour,
+            },
+          },
+        },
       ])
-      .exec()
+      .exec();
   }
 
-  async subscribeAll (url: string, emails: string[]) {
+  async subscribeAll(url: string, emails: string[]) {
     for (const email of emails) {
-      await this.subscribe(url, email)
+      await this.subscribe(url, email);
     }
   }
 
@@ -65,7 +70,7 @@ export class SubscriptionsService {
     return this.model.find().exec();
   }
 
-  async removeAll () {
+  async removeAll() {
     await this.model.remove({ email: 'ozgur@ozgurmail.net' });
   }
 }

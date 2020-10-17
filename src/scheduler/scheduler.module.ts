@@ -18,10 +18,10 @@ import { QueueTriggerService } from './queue-trigger.service';
     QueueModule,
     LoggerModule,
     AnalyzerModule,
-    DataModule
+    DataModule,
   ],
   controllers: [],
   providers: [QueueTriggerService],
-  exports: [QueueTriggerService]
+  exports: [QueueTriggerService],
 })
 export class SchedulerModule {}

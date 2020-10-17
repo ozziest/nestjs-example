@@ -4,12 +4,9 @@ import { GitServerModule } from './../git-server/git-server.module';
 import { RegistryModule } from './../registry/registry.module';
 
 @Module({
-  imports: [
-    GitServerModule,
-    RegistryModule
-  ],
+  imports: [GitServerModule, RegistryModule],
   controllers: [],
   providers: [AnalyzerService],
-  exports: [AnalyzerService]
+  exports: [AnalyzerService],
 })
 export class AnalyzerModule {}

@@ -1,4 +1,4 @@
 export enum RegistryTypes {
   JavaScript = 'JavaScript',
-  PHP = 'PHP'
+  PHP = 'PHP',
 }
