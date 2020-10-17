@@ -6,7 +6,7 @@ import { RegisterDto } from 'src/app/dto/register.dto';
 import { SubscriptionsService } from 'src/data/subscription.service';
 
 @Injectable()
-export class TasksService {
+export class QueueTriggerService {
 
   constructor (
     private readonly subscriptionService : SubscriptionsService,
@@ -28,7 +28,6 @@ export class TasksService {
       const request = new RegisterDto();
       request.url = url
       request.emails = groups[url]
-      console.log(request)
       await this.taskQueue.add(request);
     }
   }

@@ -1,11 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { Repository } from "./repository.interface";
 import { Dependency } from "./../registry/dependency.interface";
 import { GitServerFactory } from "./../git-server/git-server.factory";
 import { RegistryFactory } from "./../registry/registery.factory";
 
 @Injectable()
-export class TrackerService {
+export class AnalyzerService {
 
   constructor (
     private readonly gitServerFactory: GitServerFactory,

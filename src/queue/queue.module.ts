@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { LoggerModule } from 'src/logger/logger.module';
-import { TrackerModule } from 'src/tracker/tracker.module';
-import { TaskConsumer } from './task.consumer';
+import { AnalyzerModule } from 'src/analyzer/analyzer.module';
+import { AnalyzeConsumer } from './analyze.consumer';
 
 @Module({
   imports: [
     LoggerModule,
-    TrackerModule
+    AnalyzerModule
   ],
   controllers: [],
-  providers: [TaskConsumer],
-  exports: [TaskConsumer]
+  providers: [AnalyzeConsumer],
+  exports: [AnalyzeConsumer]
 })
 export class QueueModule {}

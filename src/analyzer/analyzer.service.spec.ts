@@ -2,13 +2,13 @@ import { HttpService } from '@nestjs/common';
 import { GitHubServer } from './../git-server/servers/github.server';
 import { GitServerFactory } from './../git-server/git-server.factory';
 import { RegistryFactory } from './../registry/registery.factory';
-import { TrackerService } from './tracker.service';
+import { AnalyzerService } from './analyzer.service';
 import { NpmRegistry } from './../registry/registries/npm.registry';
 import { Dependency } from './../registry/dependency.interface';
 import { AppLogger } from './../logger/app-logger';
 
-describe('TrackerService', () => {
-  let service: TrackerService;
+describe('AnalyzerService', () => {
+  let service: AnalyzerService;
   let gitServerFactory: GitServerFactory;
   let registryFactory: RegistryFactory;
   let logger : AppLogger;
@@ -22,7 +22,7 @@ describe('TrackerService', () => {
 
     gitServerFactory = new GitServerFactory(new HttpService(), logger, cache)
     registryFactory = new RegistryFactory(new HttpService(), logger, cache)
-    service = new TrackerService(gitServerFactory, registryFactory)
+    service = new AnalyzerService(gitServerFactory, registryFactory)
   });
 
   it('should be able to analyze the repository dependencies"', async () => {

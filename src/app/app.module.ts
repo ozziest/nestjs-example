@@ -3,10 +3,8 @@ import { CacheModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { GitServerModule } from './../git-server/git-server.module';
 import { RegistryModule } from 'src/registry/registry.module';
-import { TrackerModule } from 'src/tracker/tracker.module';
-import { TrackerService } from 'src/tracker/tracker.service';
+import { AnalyzerModule } from 'src/analyzer/analyzer.module';
 import { LoggerModule } from 'src/logger/logger.module';
-import { AppLogger } from 'src/logger/app-logger';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DataModule } from 'src/data/data.module';
@@ -28,7 +26,7 @@ import { BullModule } from '@nestjs/bull';
       },
     }),
     QueueModule,
-    TrackerModule,
+    AnalyzerModule,
     GitServerModule,
     RegistryModule,
     LoggerModule,
@@ -37,7 +35,7 @@ import { BullModule } from '@nestjs/bull';
     SchedulerModule
   ],
   controllers: [AppController],
-  providers: [TrackerService, AppLogger],
-  exports: [AppLogger]
+  providers: [],
+  exports: []
 })
 export class AppModule {}

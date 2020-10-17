@@ -3,8 +3,8 @@ import { Module } from '@nestjs/common';
 import { DataModule } from 'src/data/data.module';
 import { LoggerModule } from 'src/logger/logger.module';
 import { QueueModule } from 'src/queue/queue.module';
-import { TrackerModule } from 'src/tracker/tracker.module';
-import { TasksService } from './tasks.service';
+import { AnalyzerModule } from 'src/analyzer/analyzer.module';
+import { QueueTriggerService } from './queue-trigger.service';
 
 @Module({
   imports: [
@@ -17,11 +17,11 @@ import { TasksService } from './tasks.service';
     }),
     QueueModule,
     LoggerModule,
-    TrackerModule,
+    AnalyzerModule,
     DataModule
   ],
   controllers: [],
-  providers: [TasksService],
-  exports: [TasksService]
+  providers: [QueueTriggerService],
+  exports: [QueueTriggerService]
 })
 export class SchedulerModule {}
