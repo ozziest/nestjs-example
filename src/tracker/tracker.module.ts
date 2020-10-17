@@ -4,7 +4,6 @@ import { TrackerService } from './tracker.service';
 import { GitServerModule } from './../git-server/git-server.module';
 import { RegistryModule } from './../registry/registry.module';
 import { LoggerModule } from 'src/logger/logger.module';
-import { AppLogger } from 'src/logger/app-logger';
 
 @Module({
   imports: [
@@ -16,7 +15,7 @@ import { AppLogger } from 'src/logger/app-logger';
     LoggerModule
   ],
   controllers: [],
-  providers: [TrackerService, AppLogger],
+  providers: [TrackerService],
   exports: [TrackerService]
 })
 export class TrackerModule {}

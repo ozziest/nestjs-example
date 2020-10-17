@@ -1,20 +1,20 @@
 import * as redisStore from 'cache-manager-redis-store';
 import { CacheModule, HttpModule, Module } from '@nestjs/common';
-import { RegistryFactory } from 'src/registry/registery.factory';
 import { GitServerFactory } from './git-server.factory';
 import { LoggerModule } from 'src/logger/logger.module';
-import { AppLogger } from 'src/logger/app-logger';
+import { RegistryModule } from 'src/registry/registry.module';
 
 @Module({
   imports: [
     LoggerModule,
     HttpModule,
+    RegistryModule,
     CacheModule.register({
       store: redisStore
     })
   ],
   controllers: [],
-  providers: [GitServerFactory, RegistryFactory, AppLogger],
-  exports: [GitServerFactory, RegistryFactory]
+  providers: [GitServerFactory],
+  exports: [GitServerFactory]
 })
 export class GitServerModule {}
