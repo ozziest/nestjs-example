@@ -6,8 +6,8 @@ export class GitHubServer implements GitServer {
   repository: string;
 
   constructor(
-    private httpService: HttpService,
-    private logger: AppLogger,
+    private readonly httpService: HttpService,
+    private readonly logger: AppLogger,
     @Inject(CACHE_MANAGER) private readonly cache,
     repository: string
   ) {

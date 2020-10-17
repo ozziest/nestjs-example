@@ -6,8 +6,8 @@ import { GitHubServer } from './servers/github.server';
 @Injectable()
 export class GitServerFactory {
   constructor(
-    private httpService: HttpService,
-    private logger: AppLogger,
+    private readonly httpService: HttpService,
+    private readonly logger: AppLogger,
     @Inject(CACHE_MANAGER) private readonly cache
   ) {}
 

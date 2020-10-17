@@ -1,16 +1,13 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Controller, Get } from '@nestjs/common';
 import { Queue } from 'bull';
-import { timeStamp } from 'console';
-import { TrackerService } from 'src/tracker/tracker.service';
 import { RegisterDto } from './dto/register.dto'
 
 @Controller()
 export class AppController {
 
   constructor(
-    @InjectQueue('tasks') private taskQueue: Queue,
-    private readonly trackerService: TrackerService
+    @InjectQueue('tasks') private taskQueue: Queue
   ) {
     this.taskQueue.resume()
   }
@@ -24,12 +21,10 @@ export class AppController {
     const task = await this.taskQueue.add(
       request
     );
-    await task.finished()
-
-    // console.log('done', task)
 
     return {
-      request
+      request,
+      result: await task.finished()
     }
   }
 }

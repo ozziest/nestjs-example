@@ -7,8 +7,8 @@ import { RegistryTypes } from './registry.types';
 @Injectable()
 export class RegistryFactory {
   constructor (
-    private httpService: HttpService,
-    private logger: AppLogger,
+    private readonly httpService: HttpService,
+    private readonly logger: AppLogger,
     @Inject(CACHE_MANAGER) private readonly cache
   ) {}
   

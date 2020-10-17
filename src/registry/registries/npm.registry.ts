@@ -11,8 +11,8 @@ export class NpmRegistry implements Registry {
   dependencies: Dependency[];
 
   constructor (
-    private httpService: HttpService,
-    private logger: AppLogger,
+    private readonly httpService: HttpService,
+    private readonly logger: AppLogger,
     @Inject(CACHE_MANAGER) private readonly cache
   ) {
     this.logger.setContext(NpmRegistry.name)

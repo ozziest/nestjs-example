@@ -10,9 +10,11 @@ import { BullModule } from '@nestjs/bull';
 import { TaskConsumer } from './consumers/task.consumer';
 import { LoggerModule } from 'src/logger/logger.module';
 import { AppLogger } from 'src/logger/app-logger';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     CacheModule.register({
       store: redisStore
     }),
