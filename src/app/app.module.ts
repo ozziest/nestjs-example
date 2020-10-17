@@ -1,22 +1,36 @@
-import { Module } from '@nestjs/common';
+import * as redisStore from 'cache-manager-redis-store';
+import { CacheModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { GitServerModule } from './../git-server/git-server.module';
-import { TaskLogger } from './task-logger';
 import { RegistryModule } from 'src/registry/registry.module';
 import { TrackerModule } from 'src/tracker/tracker.module';
 import { TrackerService } from 'src/tracker/tracker.service';
 import { RedisModule } from 'src/redis/redis.module';
+import { BullModule } from '@nestjs/bull';
+import { TaskConsumer } from './consumers/task.consumer';
+import { LoggerModule } from 'src/logger/logger.module';
+import { AppLogger } from 'src/logger/app-logger';
 
 @Module({
   imports: [
+    CacheModule.register({
+      store: redisStore
+    }),
     RedisModule,
+    BullModule.registerQueue({
+      name: 'tasks',
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
     TrackerModule,
     GitServerModule,
     RegistryModule,
-    TaskLogger,
+    LoggerModule
   ],
   controllers: [AppController],
-  providers: [TrackerService, TaskLogger],
-  exports: [TaskLogger]
+  providers: [TrackerService, AppLogger, TaskConsumer],
+  exports: [AppLogger]
 })
 export class AppModule {}

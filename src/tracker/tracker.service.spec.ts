@@ -7,7 +7,7 @@ import { NpmRegistry } from './../registry/registries/npm.registry';
 import { Dependency } from './../registry/dependency.interface';
 import { RedisService } from './../redis/redis.service';
 import { Tedis } from "tedis";
-import { request } from 'express';
+import { AppLogger } from './../logger/app-logger';
 
 describe('TrackerService', () => {
   let service: TrackerService;
@@ -15,10 +15,17 @@ describe('TrackerService', () => {
   let registryFactory: RegistryFactory;
   let redisService: RedisService;
   let tedis : Tedis;
+  let logger : AppLogger;
+  let cache;
 
   beforeEach(async () => {
-    gitServerFactory = new GitServerFactory(new HttpService())
-    registryFactory = new RegistryFactory(new HttpService())
+    logger = new AppLogger()
+    logger.setContext = jest.fn()
+    logger.log = jest.fn()
+    cache = jest.fn()
+
+    gitServerFactory = new GitServerFactory(new HttpService(), logger, cache)
+    registryFactory = new RegistryFactory(new HttpService(), logger, cache)
     redisService = new RedisService()
     const Mock = jest.fn<Tedis, any>()
     tedis = new Mock()
@@ -28,12 +35,12 @@ describe('TrackerService', () => {
   });
 
   it('should be able to analyze the repository dependencies"', async () => {
-    const github = new GitHubServer(new HttpService(), '')
+    const github = new GitHubServer(new HttpService(), logger, cache, '')
     github.getRootFiles = jest.fn(() => new Promise(resolve => resolve(['package.json'])))
     github.getFileContent = jest.fn(() => new Promise(resolve => resolve('my-file-content')))
 
     const registries = [
-      new NpmRegistry(new HttpService())
+      new NpmRegistry(new HttpService(), logger, cache)
     ]
 
     const dependency : Dependency = {

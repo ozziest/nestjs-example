@@ -2,14 +2,24 @@ import { HttpService } from '@nestjs/common';
 import { of } from 'rxjs';
 import { GitHubServer } from './github.server';
 import { AxiosResponse } from 'axios';
+import { AppLogger } from './../../logger/app-logger';
 
 describe('GitHubServer', () => {
   let server: GitHubServer;
   let httpService: HttpService;
+  let cache;
 
   beforeEach(async () => {
     httpService = new HttpService()
-    server = new GitHubServer(httpService, 'owner/repository')
+    cache = jest.fn()
+    cache.get = jest.fn(() => null)
+    cache.set = jest.fn()
+
+    const logger = new AppLogger()
+    logger.setContext = jest.fn()
+    logger.debug = jest.fn()
+
+    server = new GitHubServer(httpService, logger, cache, 'owner/repository')
   });
 
   it('should be able set the repository name correctly"', () => {

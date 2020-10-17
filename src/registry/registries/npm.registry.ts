@@ -1,14 +1,21 @@
-import { HttpService } from "@nestjs/common";
+import { CACHE_MANAGER, HttpService, Inject } from "@nestjs/common";
+import { AppLogger } from "./../../logger/app-logger";
 import { Dependency } from "../dependency.interface";
 import { Registry } from "../registry.interface";
 import { NpmStructure } from "./npm.structure";
 
 export class NpmRegistry implements Registry {
+
   packageFileName: string;
   name: string;
   dependencies: Dependency[];
 
-  constructor (private httpService: HttpService) {
+  constructor (
+    private httpService: HttpService,
+    private logger: AppLogger,
+    @Inject(CACHE_MANAGER) private readonly cache
+  ) {
+    this.logger.setContext(NpmRegistry.name)
     this.packageFileName = 'package.json'
   }
 
@@ -51,15 +58,27 @@ export class NpmRegistry implements Registry {
   }
 
   async getLastVersion (dependency: Dependency): Promise<string|null> {
+    this.logger.debug(`Fetching the last version of "${dependency.name}"`)
+
+    const cacheKey = `Cache:NpmRegister@getLastVersion:${dependency.name}`
+    let value = await this.cache.get(cacheKey) || null
+    if (value) {
+      return value
+    }
+    
     const response = await this.httpService
       .get(`http://npmsearch.com/query?q=name:"${dependency.name}"`)
       .toPromise()
+
+    value = null
     const item = response.data.results.find(item => item.name.indexOf(dependency.name) > -1)
 
     if (item && item.version && item.version.length > 0) {
-      return item.version[0]
+      value = item.version[0]
     }
 
-    return null
+    await this.cache.set(cacheKey, value, { ttl: 600 })
+    
+    return value
   }
 }

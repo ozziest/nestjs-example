@@ -3,14 +3,24 @@ import { NpmRegistry } from './npm.registry';
 import { NpmStructure } from './npm.structure';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
+import { AppLogger } from './../../logger/app-logger';
 
 describe('NpmRegistry', () => {
   let registry: NpmRegistry;
   let httpService: HttpService;
+  let cache;
 
   beforeAll(async () => {
     httpService = new HttpService()
-    registry = new NpmRegistry(httpService)
+    cache = jest.fn()
+    cache.get = jest.fn(() => null)
+    cache.set = jest.fn()
+
+    const logger = new AppLogger()
+    logger.setContext = jest.fn()
+    logger.debug = jest.fn()
+    
+    registry = new NpmRegistry(httpService, logger, cache)
   });
 
   it('should be able convert basic dependency object to Dependency Array', () => {

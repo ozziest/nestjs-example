@@ -1,11 +1,16 @@
-import { HttpService, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, HttpService, Inject, Injectable } from '@nestjs/common';
+import { AppLogger } from './../logger/app-logger';
 import { NpmRegistry } from './registries/npm.registry';
 import { Registry } from './registry.interface';
 import { RegistryTypes } from './registry.types';
 
 @Injectable()
 export class RegistryFactory {
-  constructor (private httpService: HttpService) {}
+  constructor (
+    private httpService: HttpService,
+    private logger: AppLogger,
+    @Inject(CACHE_MANAGER) private readonly cache
+  ) {}
   
   resolve(files: string[]): Registry[] {
     const registryTypes = this.getRegistryTypes(files)
@@ -14,7 +19,7 @@ export class RegistryFactory {
     for (const projectType of registryTypes) {
       switch(projectType) {
         case RegistryTypes.JavaScript:
-          registries.push(new NpmRegistry(this.httpService))
+          registries.push(new NpmRegistry(this.httpService, this.logger, this.cache))
           break;
         default:
           throw new Error(`Undefined Registry: ${projectType.toString()}`);

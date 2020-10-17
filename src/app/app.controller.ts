@@ -1,4 +1,7 @@
+import { InjectQueue } from '@nestjs/bull';
 import { Controller, Get } from '@nestjs/common';
+import { Queue } from 'bull';
+import { timeStamp } from 'console';
 import { TrackerService } from 'src/tracker/tracker.service';
 import { RegisterDto } from './dto/register.dto'
 
@@ -6,22 +9,27 @@ import { RegisterDto } from './dto/register.dto'
 export class AppController {
 
   constructor(
+    @InjectQueue('tasks') private taskQueue: Queue,
     private readonly trackerService: TrackerService
-  ) {}
+  ) {
+    this.taskQueue.resume()
+  }
 
   @Get()
   async getIndex() {
     const request = new RegisterDto();
-    request.url = 'https://github.com/adonisx/adonisx'
+    request.url = 'https://github.com/adonisx/adonisx-cli'
     request.emails = ['i.ozguradem@gmail.com', 'ozgur@ozgurmail.net']
 
-    this.trackerService.createSubscription(request.url, request.emails)
+    const task = await this.taskQueue.add(
+      request
+    );
+    await task.finished()
+
+    // console.log('done', task)
 
     return {
-      status: true,
-      request,
-      outdates: await this.trackerService.analyze(request.url),
-      repositories: this.trackerService.getRepositories()
+      request
     }
   }
 }

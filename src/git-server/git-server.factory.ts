@@ -1,11 +1,14 @@
-import { HttpService, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, HttpService, Inject, Injectable } from '@nestjs/common';
+import { AppLogger } from './../logger/app-logger';
 import { GitServer } from './git-server.interface'
 import { GitHubServer } from './servers/github.server';
 
 @Injectable()
 export class GitServerFactory {
   constructor(
-    private httpService: HttpService
+    private httpService: HttpService,
+    private logger: AppLogger,
+    @Inject(CACHE_MANAGER) private readonly cache
   ) {}
 
   resolve(urlString: string): GitServer {
@@ -15,6 +18,8 @@ export class GitServerFactory {
     if (urlString.indexOf('https://github.com') > -1) {
       return new GitHubServer(
         this.httpService,
+        this.logger,
+        this.cache,
         repository
       )
     }
