@@ -21,7 +21,9 @@ export class AppController {
     request.url = 'https://github.com/adonisx/adonisx-cli'
     request.emails = ['i.ozguradem@gmail.com', 'ozgur@ozgurmail.net']
 
-    await this.subscriptionService.createAll(request.url, request.emails)
+    // await this.subscriptionService.removeAll()
+    await this.subscriptionService.subscribeAll(request.url, request.emails)
+    // console.log(await this.subscriptionService.findAll())
 
     const task = await this.taskQueue.add(
       request

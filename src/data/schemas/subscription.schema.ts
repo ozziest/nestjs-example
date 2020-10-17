@@ -10,7 +10,7 @@ export class Subscription extends Document {
   email: string;
 
   @Prop({ required: true })
-  time: number;
+  createdAt: Date;
 }
 
 export const SubscriptionSchema = SchemaFactory.createForClass(Subscription);

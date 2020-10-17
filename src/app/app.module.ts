@@ -5,14 +5,14 @@ import { GitServerModule } from './../git-server/git-server.module';
 import { RegistryModule } from 'src/registry/registry.module';
 import { TrackerModule } from 'src/tracker/tracker.module';
 import { TrackerService } from 'src/tracker/tracker.service';
-import { RedisModule } from 'src/redis/redis.module';
-import { BullModule } from '@nestjs/bull';
-import { TaskConsumer } from './consumers/task.consumer';
 import { LoggerModule } from 'src/logger/logger.module';
 import { AppLogger } from 'src/logger/app-logger';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CatsModule } from 'src/data/data.module';
+import { DataModule } from 'src/data/data.module';
+import { SchedulerModule } from 'src/scheduler/scheduler.module';
+import { QueueModule } from 'src/queue/queue.module';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -20,7 +20,6 @@ import { CatsModule } from 'src/data/data.module';
     CacheModule.register({
       store: redisStore
     }),
-    RedisModule,
     BullModule.registerQueue({
       name: 'tasks',
       redis: {
@@ -28,15 +27,17 @@ import { CatsModule } from 'src/data/data.module';
         port: 6379,
       },
     }),
+    QueueModule,
     TrackerModule,
     GitServerModule,
     RegistryModule,
     LoggerModule,
     MongooseModule.forRoot('mongodb://localhost/test'),
-    CatsModule
+    DataModule,
+    SchedulerModule
   ],
   controllers: [AppController],
-  providers: [TrackerService, AppLogger, TaskConsumer],
+  providers: [TrackerService, AppLogger],
   exports: [AppLogger]
 })
 export class AppModule {}
