@@ -62,6 +62,10 @@ export class TrackerService {
     })
   }
 
+  getRepositories () : Repository[] {
+    return this.repositories
+  }
+
   async createSubscription (url: string, emails: string[]) {
     let repository = this.repositories.find(item => item.url === url)
     if (!repository) {
@@ -74,21 +78,23 @@ export class TrackerService {
 
     const client = await this.redisService.getClient()
     for (const email of emails) {
-      const isAdded = repository.subscriptions.some(item => item.email === email)
-      if (!isAdded) {
-        console.log('added')
-        repository.subscriptions.push({
+      let subscription = repository.subscriptions.find(item => item.email === email)
+      if (!subscription) {
+        subscription = {
           email,
           createdAt: new Date()
-        })
-
-        const hash = createHmac('sha512', `${url}:${email}`).digest('hex')
-        await client.set(`SUBSCRIPTION:${hash}`, JSON.stringify({
-          url,
-          email,
-          createdAt: (new Date()).toString()
-        }))
+        }
+        repository.subscriptions.push(subscription)
+      } else {
+        subscription.createdAt = new Date()
       }
+
+      const hash = createHmac('sha512', `${url}:${email}`).digest('hex')
+      await client.set(`SUBSCRIPTION:${hash}`, JSON.stringify({
+        url,
+        email,
+        createdAt: subscription.createdAt
+      }))
     }
   }
 

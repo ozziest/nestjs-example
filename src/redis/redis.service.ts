@@ -5,11 +5,15 @@ import { Tedis } from "tedis";
 export class RedisService {
   private tedis: Tedis;
 
-  constructor() {
-    this.tedis = new Tedis();
+  connect () {
+    this.tedis = new Tedis()
   }
 
   getClient () {
+    if (!this.tedis) {
+      this.connect()
+    }
+
     return this.tedis
   }
 }

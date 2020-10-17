@@ -20,7 +20,8 @@ export class AppController {
     return {
       status: true,
       request,
-      outdates: await this.trackerService.analyze(request.url)
+      outdates: await this.trackerService.analyze(request.url),
+      repositories: this.trackerService.getRepositories()
     }
   }
 }
