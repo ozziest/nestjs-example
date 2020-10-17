@@ -11,6 +11,8 @@ import { TaskConsumer } from './consumers/task.consumer';
 import { LoggerModule } from 'src/logger/logger.module';
 import { AppLogger } from 'src/logger/app-logger';
 import { ScheduleModule } from '@nestjs/schedule';
+import { MongooseModule } from '@nestjs/mongoose';
+import { CatsModule } from 'src/data/data.module';
 
 @Module({
   imports: [
@@ -29,7 +31,9 @@ import { ScheduleModule } from '@nestjs/schedule';
     TrackerModule,
     GitServerModule,
     RegistryModule,
-    LoggerModule
+    LoggerModule,
+    MongooseModule.forRoot('mongodb://localhost/test'),
+    CatsModule
   ],
   controllers: [AppController],
   providers: [TrackerService, AppLogger, TaskConsumer],
