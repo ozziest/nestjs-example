@@ -82,7 +82,9 @@ export class NpmRegistry implements Registry {
       value = item.version[0];
     }
 
-    await this.cache.set(cacheKey, value, { ttl: process.env.CACHE_REGISTRY_TTL });
+    if (value) {
+      await this.cache.set(cacheKey, value, { ttl: process.env.CACHE_REGISTRY_TTL });
+    }
 
     return value;
   }

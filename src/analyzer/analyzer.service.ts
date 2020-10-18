@@ -32,6 +32,8 @@ export class AnalyzerService {
       result.push(...(await registry.resolveOutdates()));
     }
 
+    this.logger.debug('All packages have been analyzed.')
+
     return result;
   }
 }
