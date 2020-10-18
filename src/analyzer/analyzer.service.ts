@@ -19,8 +19,9 @@ export class AnalyzerService {
     );
 
     for (const registry of registries) {
-      const content = await server.getFileContent(registry.packageFileName);
-      registry.resolveRependencies(content);
+      registry.resolveRependencies(
+        await server.getFileContent(registry.packageFileName)
+      );
       result.push(...(await registry.resolveOutdates()));
     }
 

@@ -13,7 +13,7 @@ export class SubscriptionsService {
     let item = await this.getSubscription(url, email);
 
     if (item) {
-      return;
+      return null;
     }
 
     item = new this.model();
