@@ -65,12 +65,4 @@ export class SubscriptionsService {
       await this.subscribe(url, email);
     }
   }
-
-  async findAll(): Promise<Subscription[]> {
-    return this.model.find().exec();
-  }
-
-  async removeAll() {
-    await this.model.remove({ email: 'ozgur@ozgurmail.net' });
-  }
 }

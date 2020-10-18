@@ -24,7 +24,7 @@ describe('SubscriptionsService', () => {
     service = module.get<SubscriptionsService>(SubscriptionsService);
   });
 
-  it('should be able to get if ther is any subscription', async () => {
+  it('should be able to get if there is any subscription', async () => {
     model.findOne = jest.fn(() => model)
     model.exec = jest.fn(() => new Promise((resolve) => { resolve({ url: 'exec-url' }) }))
     const result = await service.getSubscription('my-url', 'email@mail.com')
@@ -63,4 +63,29 @@ describe('SubscriptionsService', () => {
     expect(result).toBeNull()
     expect(item.save.mock.calls.length).toBe(0)
   });
+
+  it('should be able to subscription for all emails', async () => {
+    const fakeMethod = service.subscribe = jest.fn()
+    await service.subscribeAll('my-url', ['1@mail.com', '2@mail.com'])
+    expect(fakeMethod.mock.calls.length).toBe(2)
+    expect(fakeMethod.mock.calls[0][0]).toBe('my-url')
+    expect(fakeMethod.mock.calls[1][0]).toBe('my-url')
+    expect(fakeMethod.mock.calls[0][1]).toBe('1@mail.com')
+    expect(fakeMethod.mock.calls[1][1]).toBe('2@mail.com')
+  })
+
+  it('should be able get subscriptions by times', async () => {
+    const items = [
+      {
+        url: 'my-url',
+        email: '1@mail.com',
+        createdAt: new Date
+      }
+    ]
+    const mockFunction = model.aggregate = jest.fn(() => model)
+    model.exec = jest.fn(() => new Promise(resolve => resolve(items)))
+    const result = await service.getByTimes(20, 21)
+    expect(result).toBe(items)
+    expect(mockFunction.mock.calls.length).toBe(1)
+  })
 });
