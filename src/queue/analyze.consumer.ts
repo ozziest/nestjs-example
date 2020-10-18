@@ -20,7 +20,7 @@ export class AnalyzeConsumer {
   @Process()
   async transcode(job: Job<SubscriptionDto>) {
     this.logger.debug('Analyzing dependencies has been started.');
-    const report = await this.analyzerService.analyze(job.data.url);
+    const report = await this.analyzerService.analyze(job.data.url.toString());
 
     // We should add report-sender queue to send report as email
     if (job.data.sendEmail) {

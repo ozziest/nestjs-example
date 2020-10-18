@@ -1,5 +1,5 @@
 export class SubscriptionDto {
-  url: string;
+  url: URL;
   emails: string[];
   sendEmail: boolean
 }

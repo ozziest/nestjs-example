@@ -23,7 +23,7 @@ export class AppController {
   @Render('success')
   async postRegister(@Body() register: RegisterDto) {
     const data : SubscriptionDto = {
-      url: register.url,
+      url: new URL(register.url),
       emails: register.emails.split(';'),
       sendEmail: false
     }

@@ -72,7 +72,7 @@ export class SubscriptionsService {
 
   async subscribeAll(data : SubscriptionDto) {
     for (const email of data.emails) {
-      await this.subscribe(data.url, email);
+      await this.subscribe(data.url.toString(), email);
     }
   }
 }
