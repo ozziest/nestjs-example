@@ -33,6 +33,23 @@ export class GitHubServer implements GitServer {
     return value;
   }
 
+  async getDefaultBranch (): Promise<string> {
+    this.logger.debug(`Fetching root files of the "${this.repository}"`);
+
+    const cacheKey = `Cache:GitHubServer@getDefaultBranch:${this.repository}`;
+    let value = (await this.cache.get(cacheKey)) || null;
+    if (value) {
+      return value;
+    }
+
+    const response = await this.httpService
+      .get(`https://api.github.com/repos/${this.repository}`)
+      .toPromise();
+    value = response.data.default_branch
+    await this.cache.set(cacheKey, value, { ttl: process.env.CACHE_GITSERVER_TTL });
+    return value;
+  }
+
   async getFileContent(filename: string): Promise<string> {
     this.logger.debug(
       `Fetching file content of "${this.repository}/${filename}"`,
@@ -44,16 +61,25 @@ export class GitHubServer implements GitServer {
       return value;
     }
 
-    const response = await this.httpService
-      .get(
-        `https://raw.githubusercontent.com/${this.repository}/master/${filename}`,
-        {
-          headers: {
-            Accept: 'text/plain',
+    const defaultBranch = await this.getDefaultBranch()
+
+    let response;
+
+    try {
+      response = await this.httpService
+        .get(
+          `https://raw.githubusercontent.com/${this.repository}/${defaultBranch}/${filename}`,
+          {
+            headers: {
+              Accept: 'text/plain',
+            },
           },
-        },
-      )
-      .toPromise();
+        )
+        .toPromise();
+    } catch (err) {
+      console.log(err)
+      throw new Error(`The file is not found on the server: ${filename}`)
+    }
     value = response.data;
 
     await this.cache.set(cacheKey, value, { ttl: process.env.CACHE_GITSERVER_TTL });

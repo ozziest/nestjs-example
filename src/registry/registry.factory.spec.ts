@@ -30,8 +30,8 @@ describe('RegistryFactory', () => {
   });
 
   it('should be able throw for undefined registries', () => {
-    expect(() => factory.resolve(['package.json', 'composer.json'])).toThrow(
-      'Undefined Registry: PHP',
+    expect(() => factory.resolve([])).toThrow(
+      'There is not any supported package manager (NPM, Composer) in the repository.'
     );
   });
 });

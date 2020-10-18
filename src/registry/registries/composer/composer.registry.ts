@@ -2,9 +2,10 @@ import { CACHE_MANAGER, HttpService, Inject } from '@nestjs/common';
 import { AppLogger } from './../../../logger/app-logger';
 import { Dependency } from '../../dependency.interface';
 import { Registry } from '../../registry.interface';
-import { NpmStructure } from './npm.structure';
+import { ComposerStructure } from './composer.structure';
+import { SemVer } from 'semver'
 
-export class NpmRegistry implements Registry {
+export class ComposerRegistry implements Registry {
   packageFileName: string;
   dependencies: Dependency[];
 
@@ -13,20 +14,20 @@ export class NpmRegistry implements Registry {
     private readonly logger: AppLogger,
     @Inject(CACHE_MANAGER) private readonly cache,
   ) {
-    this.logger.setContext(NpmRegistry.name);
-    this.packageFileName = 'package.json';
+    this.logger.setContext(ComposerRegistry.name);
+    this.packageFileName = 'composer.json';
   }
 
-  resolveRependencies(content: NpmStructure) {
+  resolveRependencies(content: ComposerStructure) {
     this.dependencies = [];
 
-    if (content.dependencies) {
-      this.dependencies.push(...this.toDependencyArray(content.dependencies));
+    if (content.require) {
+      this.dependencies.push(...this.toDependencyArray(content.require));
     }
 
-    if (content.devDependencies) {
+    if (content["require-dev"]) {
       this.dependencies.push(
-        ...this.toDependencyArray(content.devDependencies),
+        ...this.toDependencyArray(content["require-dev"]),
       );
     }
   }
@@ -63,6 +64,10 @@ export class NpmRegistry implements Registry {
   async getLastVersion(dependency: Dependency): Promise<string | null> {
     this.logger.debug(`Fetching the last version of "${dependency.name}"`);
 
+    if (dependency.name === "php") {
+      return dependency.currentVersion
+    }
+
     const cacheKey = `Cache:NpmRegister@getLastVersion:${dependency.name}`;
     let value = (await this.cache.get(cacheKey)) || null;
     if (value) {
@@ -70,16 +75,18 @@ export class NpmRegistry implements Registry {
     }
 
     const response = await this.httpService
-      .get(`http://npmsearch.com/query?q=name:"${dependency.name}"`)
+      .get(`https://repo.packagist.org/p/${dependency.name}.json`)
       .toPromise();
 
     value = null;
-    const item = response.data.results.find(
-      item => item.name.indexOf(dependency.name) > -1,
-    );
+    const item = response.data.packages[dependency.name]
 
-    if (item && item.version && item.version.length > 0) {
-      value = item.version[0];
+    for (const version of Object.keys(item)) {
+      try {
+        value = (new SemVer(version)).toString()
+      } catch (err) {
+        // We don't need to do anything
+      }
     }
 
     await this.cache.set(cacheKey, value, { ttl: process.env.CACHE_REGISTRY_TTL });

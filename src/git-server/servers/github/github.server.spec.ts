@@ -77,12 +77,33 @@ describe('GitHubServer', () => {
       .spyOn(httpService, 'get')
       .mockImplementation(() => of(axiosResult));
 
+    server.getDefaultBranch = jest.fn(() => new Promise(resolve => resolve('custom-default-branch')))
+
     const result = await server.getFileContent('package.json');
     expect(result).toBe(axiosResult.data);
 
     expect(httpServiceListener.mock.calls.length).toBe(1);
     expect(httpServiceListener.mock.calls[0][0]).toBe(
-      'https://raw.githubusercontent.com/owner/repository/master/package.json',
+      'https://raw.githubusercontent.com/owner/repository/custom-default-branch/package.json',
     );
   });
+
+  it('should be able get the default branch"', async () => {
+    const axiosResult: AxiosResponse = {
+      data: {
+        default_branch: 'custom-default-branch',
+      },
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config: {},
+    };
+    
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementation(() => of(axiosResult));
+    
+    const result = await server.getDefaultBranch()
+    expect(result).toBe('custom-default-branch')
+  })
 });

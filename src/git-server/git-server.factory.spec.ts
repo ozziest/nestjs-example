@@ -27,7 +27,7 @@ describe('GitServerFactory', () => {
   it('should be able to throw an exception for unknown git servers', () => {
     expect(() =>
       factory.resolve('https://unknown.com/owner/repository'),
-    ).toThrow('Undefined Git Server: unknown.com');
+    ).toThrow('The Git Server has not been supported yet: unknown.com');
   });
 
   it('should be able to resolve the GitHub server', () => {

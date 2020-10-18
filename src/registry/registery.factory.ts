@@ -1,5 +1,6 @@
 import { CACHE_MANAGER, HttpService, Inject, Injectable } from '@nestjs/common';
 import { AppLogger } from './../logger/app-logger';
+import { ComposerRegistry } from './registries/composer/composer.registry';
 import { NpmRegistry } from './registries/npm/npm.registry';
 import { Registry } from './registry.interface';
 import { RegistryTypes } from './registry.types';
@@ -16,6 +17,10 @@ export class RegistryFactory {
     const registryTypes = this.getRegistryTypes(files);
     const registries: Registry[] = [];
 
+    if (registryTypes.length === 0) {
+      throw new Error('There is not any supported package manager (NPM, Composer) in the repository.')
+    }
+
     for (const projectType of registryTypes) {
       switch (projectType) {
         case RegistryTypes.JavaScript:
@@ -23,8 +28,11 @@ export class RegistryFactory {
             new NpmRegistry(this.httpService, this.logger, this.cache),
           );
           break;
-        default:
-          throw new Error(`Undefined Registry: ${projectType.toString()}`);
+        case RegistryTypes.PHP:
+          registries.push(
+            new ComposerRegistry(this.httpService, this.logger, this.cache),
+          );
+          break;
       }
     }
 
