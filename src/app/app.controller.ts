@@ -24,7 +24,7 @@ export class AppController {
   async postRegister(@Body() register: RegisterDto) {
     const data : SubscriptionDto = {
       url: new URL(register.url),
-      emails: register.emails.split(';'),
+      emails: register.emails.split(';').filter(email => email.trim().length > 0),
       sendEmail: false
     }
 
