@@ -11,6 +11,8 @@ import { DataModule } from 'src/data/data.module';
 import { SchedulerModule } from 'src/scheduler/scheduler.module';
 import { QueueModule } from 'src/queue/queue.module';
 import { BullModule } from '@nestjs/bull';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { BullModule } from '@nestjs/bull';
     CacheModule.register({
       store: redisStore,
     }),
+    MongooseModule.forRoot('mongodb://localhost/test'),
     BullModule.registerQueue({
       name: 'analyze',
       redis: {
@@ -25,14 +28,28 @@ import { BullModule } from '@nestjs/bull';
         port: 6379,
       },
     }),
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.mailgun.org',
+        port: 465,
+        secure: true,
+        auth: {
+          user: 'ozgur@ozgurmail.net',
+          pass: 'a2b97eb11af3791ee6a20a43d442a612-2fbe671d-78aab731'
+        },
+      },
+      defaults: {
+        from:'"Özgür Adem Işıklı" <ozgur@ozgurmail.net>',
+      }
+    }),
     QueueModule,
     AnalyzerModule,
     GitServerModule,
     RegistryModule,
     LoggerModule,
-    MongooseModule.forRoot('mongodb://localhost/test'),
     DataModule,
     SchedulerModule,
+    MailModule
   ],
   controllers: [AppController],
   providers: [],

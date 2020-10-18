@@ -28,7 +28,7 @@ export class GitHubServer implements GitServer {
       .get(`https://api.github.com/repos/${this.repository}/contents`)
       .toPromise();
     value = response.data.map(file => file.name);
-    await this.cache.set(cacheKey, value, { ttl: 600 });
+    await this.cache.set(cacheKey, value, { ttl: 6000 });
 
     return value;
   }
@@ -56,7 +56,7 @@ export class GitHubServer implements GitServer {
       .toPromise();
     value = response.data;
 
-    await this.cache.set(cacheKey, value, { ttl: 600 });
+    await this.cache.set(cacheKey, value, { ttl: 6000 });
 
     return value;
   }
