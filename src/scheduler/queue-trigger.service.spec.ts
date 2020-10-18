@@ -40,7 +40,11 @@ describe('QueueTriggerService', () => {
     await service.handleInterval()
     expect(subscriptionService.getByTimes.mock.calls.length).toBe(1)
     expect(subscriptionService.getByTimes.mock.calls[0][0]).toBe((new Date).getHours())
-    expect(subscriptionService.getByTimes.mock.calls[0][1]).toBe((new Date).getHours() + 1)
+    let nextHours = (new Date).getHours() + 1
+    if (nextHours === 24) {
+      nextHours = 0
+    }
+    expect(subscriptionService.getByTimes.mock.calls[0][1]).toBe(nextHours)
 
     expect(analysisQueue.add.mock.calls.length).toBe(2)
     expect(analysisQueue.add.mock.calls[0][0].url).toBe('repo1')

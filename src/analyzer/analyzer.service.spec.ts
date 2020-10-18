@@ -5,6 +5,7 @@ import { RegistryFactory } from './../registry/registery.factory';
 import { AnalyzerService } from './analyzer.service';
 import { NpmRegistry } from './../registry/registries/npm/npm.registry';
 import { Dependency } from './../registry/dependency.interface';
+import { SemanticService } from './../registry/semantic.service';
 
 describe('AnalyzerService', () => {
   let service: AnalyzerService;
@@ -20,7 +21,7 @@ describe('AnalyzerService', () => {
     logger.debug = jest.fn();
     cache = jest.fn();
 
-    gitServerFactory = new GitServerFactory(new HttpService(), logger, cache);
+    gitServerFactory = new GitServerFactory(new HttpService(), cache);
     registryFactory = new RegistryFactory(new HttpService(), logger, cache);
     service = new AnalyzerService(gitServerFactory, registryFactory, logger);
   });
@@ -34,7 +35,7 @@ describe('AnalyzerService', () => {
       () => new Promise(resolve => resolve('my-file-content')),
     );
 
-    const registries = [new NpmRegistry(new HttpService(), logger, cache)];
+    const registries = [new NpmRegistry(new HttpService(), new SemanticService(), logger, cache)];
 
     const dependency: Dependency = {
       name: 'jest',

@@ -3,7 +3,7 @@ import { AppLogger } from './../../../logger/app-logger';
 import { Dependency } from '../../dependency.interface';
 import { Registry } from '../../registry.interface';
 import { ComposerStructure } from './composer.structure';
-import { SemVer } from 'semver'
+import { SemanticService } from './../../semantic.service';
 
 export class ComposerRegistry implements Registry {
   packageFileName: string;
@@ -11,6 +11,7 @@ export class ComposerRegistry implements Registry {
 
   constructor(
     private readonly httpService: HttpService,
+    private readonly semanticService: SemanticService,
     private readonly logger: AppLogger,
     @Inject(CACHE_MANAGER) private readonly cache,
   ) {
@@ -78,17 +79,9 @@ export class ComposerRegistry implements Registry {
       .get(`https://repo.packagist.org/p/${dependency.name}.json`)
       .toPromise();
 
-    value = null;
+    
     const item = response.data.packages[dependency.name]
-
-    for (const version of Object.keys(item)) {
-      try {
-        value = (new SemVer(version)).toString()
-      } catch (err) {
-        // We don't need to do anything
-      }
-    }
-
+    value = this.semanticService.getLastVersion(dependency.currentVersion, Object.keys(item));
     await this.cache.set(cacheKey, value, { ttl: process.env.CACHE_REGISTRY_TTL });
 
     return value;

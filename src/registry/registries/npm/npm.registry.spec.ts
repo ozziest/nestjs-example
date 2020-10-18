@@ -4,6 +4,7 @@ import { NpmStructure } from './npm.structure';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 import { AppLogger } from './../../../logger/app-logger';
+import { SemanticService } from './../../semantic.service';
 
 describe('NpmRegistry', () => {
   let registry: NpmRegistry;
@@ -20,7 +21,7 @@ describe('NpmRegistry', () => {
     logger.setContext = jest.fn();
     logger.debug = jest.fn();
 
-    registry = new NpmRegistry(httpService, logger, cache);
+    registry = new NpmRegistry(httpService, new SemanticService(), logger, cache);
   });
 
   it('should be able convert basic dependency object to Dependency Array', () => {
@@ -68,6 +69,10 @@ describe('NpmRegistry', () => {
             name: ['jest'],
             version: ['3.2.1'],
           },
+          {
+            name: ['my-dependency'],
+            version: ['3.5.6'],
+          }
         ],
         total: 1,
         from: 0,
@@ -92,9 +97,9 @@ describe('NpmRegistry', () => {
       'http://npmsearch.com/query?q=name:"jest"',
     );
 
-    expect(result.length).toBe(1);
-    expect(result[0].name).toBe('jest');
-    expect(result[0].lastVersion).toBe('3.2.1');
+    expect(result.length).toBe(2);
+    expect(result[0].name).toBe('my-dependency');
+    expect(result[0].lastVersion).toBe('3.5.6');
     expect(result[0].isOutdated).toBeTruthy();
   });
 });

@@ -4,11 +4,13 @@ import { ComposerRegistry } from './registries/composer/composer.registry';
 import { NpmRegistry } from './registries/npm/npm.registry';
 import { Registry } from './registry.interface';
 import { RegistryTypes } from './registry.types';
+import { SemanticService } from './semantic.service';
 
 @Injectable()
 export class RegistryFactory {
   constructor(
     private readonly httpService: HttpService,
+    private readonly semanticService: SemanticService,
     @Inject(CACHE_MANAGER) private readonly cache,
   ) {}
 
@@ -24,12 +26,12 @@ export class RegistryFactory {
       switch (projectType) {
         case RegistryTypes.JavaScript:
           registries.push(
-            new NpmRegistry(this.httpService, new AppLogger(), this.cache),
+            new NpmRegistry(this.httpService, this.semanticService, new AppLogger(), this.cache),
           );
           break;
         case RegistryTypes.PHP:
           registries.push(
-            new ComposerRegistry(this.httpService, new AppLogger(), this.cache),
+            new ComposerRegistry(this.httpService, this.semanticService, new AppLogger(), this.cache),
           );
           break;
       }

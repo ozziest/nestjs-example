@@ -3,6 +3,7 @@ import { AppLogger } from './../../../logger/app-logger';
 import { Dependency } from '../../dependency.interface';
 import { Registry } from '../../registry.interface';
 import { NpmStructure } from './npm.structure';
+import { SemanticService } from './../../semantic.service';
 
 export class NpmRegistry implements Registry {
   packageFileName: string;
@@ -10,6 +11,7 @@ export class NpmRegistry implements Registry {
 
   constructor(
     private readonly httpService: HttpService,
+    private readonly semanticService: SemanticService,
     private readonly logger: AppLogger,
     @Inject(CACHE_MANAGER) private readonly cache,
   ) {
@@ -73,21 +75,12 @@ export class NpmRegistry implements Registry {
       .get(`http://npmsearch.com/query?q=name:"${dependency.name}"`)
       .toPromise();
 
-    value = null;
     const item = response.data.results.find(
       item => item.name.indexOf(dependency.name) > -1,
     );
 
-    if (item && item.version && item.version.length > 0) {
-      value = item.version[0];
-    }
-
-    if (value === null) {
-      value = dependency.currentVersion
-    }
-
+    value = this.semanticService.getLastVersion(dependency.currentVersion, item.version)
     await this.cache.set(cacheKey, value, { ttl: process.env.CACHE_REGISTRY_TTL });
-
     return value;
   }
 }

@@ -4,6 +4,7 @@ import { ComposerStructure } from './composer.structure';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 import { AppLogger } from './../../../logger/app-logger';
+import { SemanticService } from './../../semantic.service';
 
 describe('ComposerRegistry', () => {
   let registry: ComposerRegistry;
@@ -20,7 +21,7 @@ describe('ComposerRegistry', () => {
     logger.setContext = jest.fn();
     logger.debug = jest.fn();
 
-    registry = new ComposerRegistry(httpService, logger, cache);
+    registry = new ComposerRegistry(httpService, new SemanticService(), logger, cache);
   });
 
   it('should be able convert basic dependency object to Dependency Array', () => {
