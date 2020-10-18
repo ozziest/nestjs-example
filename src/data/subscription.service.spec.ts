@@ -69,7 +69,8 @@ describe('SubscriptionsService', () => {
     const fakeMethod = service.subscribe = jest.fn()
     const data : SubscriptionDto = {
       url: 'my-url',
-      emails: ['1@mail.com', '2@mail.com']
+      emails: ['1@mail.com', '2@mail.com'],
+      sendEmail: true
     }
     await service.subscribeAll(data)
     expect(fakeMethod.mock.calls.length).toBe(2)
