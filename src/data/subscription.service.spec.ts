@@ -1,5 +1,6 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
+import { url } from 'inspector';
 import { AppLogger } from './../logger/app-logger';
 import { SubscriptionDto } from './dto/subscription.dto';
 import { Subscription } from './schemas/subscription.schema';
@@ -77,14 +78,13 @@ describe('SubscriptionsService', () => {
   it('should be able to subscription for all emails', async () => {
     const fakeMethod = service.subscribe = jest.fn()
     const data : SubscriptionDto = {
-      url: 'my-url',
-      emails: ['1@mail.com', '2@mail.com'],
-      sendEmail: true
+      url: new URL('https://github.com/owner/repository'),
+      emails: ['1@mail.com', '2@mail.com']
     }
     await service.subscribeAll(data)
     expect(fakeMethod.mock.calls.length).toBe(2)
-    expect(fakeMethod.mock.calls[0][0]).toBe('my-url')
-    expect(fakeMethod.mock.calls[1][0]).toBe('my-url')
+    expect(fakeMethod.mock.calls[0][0]).toBe('https://github.com/owner/repository')
+    expect(fakeMethod.mock.calls[1][0]).toBe('https://github.com/owner/repository')
     expect(fakeMethod.mock.calls[0][1]).toBe('1@mail.com')
     expect(fakeMethod.mock.calls[1][1]).toBe('2@mail.com')
   })

@@ -1,6 +1,7 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Body, Controller, Get, Post, Render } from '@nestjs/common';
 import { Queue } from 'bull';
+import { AnalyzerService } from 'src/analyzer/analyzer.service';
 import { SubscriptionDto } from 'src/data/dto/subscription.dto';
 import { SubscriptionsService } from 'src/data/subscription.service';
 import { QueueAnalyze } from './constants.service';
@@ -11,6 +12,7 @@ export class AppController {
   constructor(
     @InjectQueue(QueueAnalyze) private analysisQueue: Queue,
     private readonly subscriptionService: SubscriptionsService,
+    private readonly analyzerService: AnalyzerService
   ) { }
 
   @Get()
@@ -25,12 +27,10 @@ export class AppController {
     const data : SubscriptionDto = {
       url: new URL(register.url),
       emails: register.emails.split(';').filter(email => email.trim().length > 0),
-      sendEmail: false
     }
 
     await this.subscriptionService.subscribeAll(data);
-    const task = await this.analysisQueue.add(data);
-    const report = await task.finished()
+    const report = await this.analyzerService.analyze(data.url.toString())
 
     return {
       data,

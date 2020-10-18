@@ -47,26 +47,4 @@ describe('AnalyzeConsumer', () => {
     expect(reportSenderQueue.add.mock.calls[1][0].email).toBe('2@mail.com')
     expect(reportSenderQueue.add.mock.calls[1][0].html).toBe('html-content')
   });
-
-  it('should be able to not add report email task to the queue if we do not need.', async () => {
-    const job = {
-      data: {
-        url: 'my-url',
-        emails: ['1@mail.com', '2@mail.com'],
-        sendEmail: false
-      }
-    } as Job
-    
-    const response = {
-      isAnalyzed: true
-    }
-
-    reportSenderQueue.add = jest.fn()
-
-    analyzerService.analyze = jest.fn(() => new Promise(resolve => resolve(response)))
-    expect(await consumer.transcode(job)).toBe(response)
-
-    // ReportSenderQueue task should not be added
-    expect(reportSenderQueue.add.mock.calls.length).toBe(0)
-  });
 });
