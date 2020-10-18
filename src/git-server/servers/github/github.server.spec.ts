@@ -61,7 +61,7 @@ describe('GitHubServer', () => {
       data: {
         name: 'my-repository',
         dependencies: {
-          '@adonisjs/ace': '^5.0.8',
+          'owner/repository': '^5.0.8',
         },
         devDependencies: {
           jest: '^25.2.7',
