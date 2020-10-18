@@ -23,14 +23,17 @@ export class AnalyzeConsumer {
     const report = await this.analyzerService.analyze(job.data.url);
 
     // We should add report-sender queue to send report as email
-    const reportHtml = this.htmlBuilderService.buildReport(report)
-    for (const email of job.data.emails) {
-      this.reportSenderQueue.add({
-        email: email,
-        html: reportHtml  
-      })
+    if (job.data.sendEmail) {
+      const reportHtml = this.htmlBuilderService.buildReport(report)
+      for (const email of job.data.emails) {
+        this.reportSenderQueue.add({
+          email: email,
+          html: reportHtml  
+        })
+      }
+      this.logger.debug('Report Sender Queue has been structured.');
     }
-    this.logger.debug('Report Sender Queue has been structured.');
+
     this.logger.debug('Analyzing dependencies has been completed.');
     return report;
   }

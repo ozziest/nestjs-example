@@ -22,10 +22,11 @@ export class QueueTriggerService {
     const groups = this.toGroupList(result);
 
     for (const url in groups) {
-      const request = new SubscriptionDto();
-      request.url = url;
-      request.emails = groups[url];
-      await this.analysisQueue.add(request);
+      await this.analysisQueue.add({
+        url: url,
+        emails: groups[url],
+        sendEmail: true
+      });
     }
   }
 

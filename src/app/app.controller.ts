@@ -23,7 +23,8 @@ export class AppController {
   async postRegister(@Body() register: RegisterDto) {
     const data : SubscriptionDto = {
       url: register.url,
-      emails: register.emails.split(';')
+      emails: register.emails.split(';'),
+      sendEmail: false
     }
 
     await this.subscriptionService.subscribeAll(data);
