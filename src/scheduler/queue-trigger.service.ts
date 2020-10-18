@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 import { Queue } from 'bull';
 import * as moment from 'moment';
-import { SubscriptionDto } from './../data/dto/subscription.dto';
 import { SubscriptionsService } from './../data/subscription.service';
 
 @Injectable()

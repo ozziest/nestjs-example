@@ -1,6 +1,5 @@
 import { InjectQueue, Process, Processor } from '@nestjs/bull';
 import { Job, Queue } from 'bull';
-import { RegisterDto } from './../app/dto/register.dto';
 import { AppLogger } from './../logger/app-logger';
 import { AnalyzerService } from './../analyzer/analyzer.service';
 import { HtmlBuilderService } from './../mail/html-builder.service';
