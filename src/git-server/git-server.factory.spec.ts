@@ -1,5 +1,4 @@
 import { HttpService } from '@nestjs/common';
-import { AppLogger } from './../logger/app-logger';
 import { GitServerFactory } from './git-server.factory';
 
 describe('GitServerFactory', () => {
@@ -7,12 +6,9 @@ describe('GitServerFactory', () => {
 
   beforeAll(async () => {
     const MockHttpService = jest.fn<HttpService, any>();
-    const logger = new AppLogger();
-    logger.setContext = jest.fn();
-    logger.debug = jest.fn();
 
     const cache = jest.fn();
-    factory = new GitServerFactory(new MockHttpService(), logger, cache);
+    factory = new GitServerFactory(new MockHttpService(), cache);
   });
 
   it('should be able to resolve the repository name"', () => {

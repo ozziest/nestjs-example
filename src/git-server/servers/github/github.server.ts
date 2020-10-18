@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, HttpService, Inject } from '@nestjs/common';
+import { BadRequestException, CACHE_MANAGER, HttpService, Inject } from '@nestjs/common';
 import { AppLogger } from './../../../logger/app-logger';
 import { GitServer } from '../../git-server.interface';
 
@@ -77,8 +77,7 @@ export class GitHubServer implements GitServer {
         )
         .toPromise();
     } catch (err) {
-      console.log(err)
-      throw new Error(`The file is not found on the server: ${filename}`)
+      throw new BadRequestException(`The file is not found on the server: ${filename}`)
     }
     value = response.data;
 

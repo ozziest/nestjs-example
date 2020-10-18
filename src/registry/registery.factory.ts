@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, HttpService, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, CACHE_MANAGER, HttpService, Inject, Injectable } from '@nestjs/common';
 import { AppLogger } from './../logger/app-logger';
 import { ComposerRegistry } from './registries/composer/composer.registry';
 import { NpmRegistry } from './registries/npm/npm.registry';
@@ -9,7 +9,6 @@ import { RegistryTypes } from './registry.types';
 export class RegistryFactory {
   constructor(
     private readonly httpService: HttpService,
-    private readonly logger: AppLogger,
     @Inject(CACHE_MANAGER) private readonly cache,
   ) {}
 
@@ -18,19 +17,19 @@ export class RegistryFactory {
     const registries: Registry[] = [];
 
     if (registryTypes.length === 0) {
-      throw new Error('There is not any supported package manager (NPM, Composer) in the repository.')
+      throw new BadRequestException('There is not any supported package manager (NPM, Composer) in the repository.')
     }
 
     for (const projectType of registryTypes) {
       switch (projectType) {
         case RegistryTypes.JavaScript:
           registries.push(
-            new NpmRegistry(this.httpService, this.logger, this.cache),
+            new NpmRegistry(this.httpService, new AppLogger(), this.cache),
           );
           break;
         case RegistryTypes.PHP:
           registries.push(
-            new ComposerRegistry(this.httpService, this.logger, this.cache),
+            new ComposerRegistry(this.httpService, new AppLogger(), this.cache),
           );
           break;
       }

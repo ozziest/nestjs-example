@@ -64,7 +64,7 @@ export class ComposerRegistry implements Registry {
   async getLastVersion(dependency: Dependency): Promise<string | null> {
     this.logger.debug(`Fetching the last version of "${dependency.name}"`);
 
-    if (dependency.name === "php") {
+    if (dependency.name === "php" || dependency.name === "ext-fileinfo") {
       return dependency.currentVersion
     }
 
