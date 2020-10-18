@@ -1,8 +1,8 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
-import { RegisterDto } from 'src/app/dto/register.dto';
-import { AppLogger } from 'src/logger/app-logger';
-import { AnalyzerService } from 'src/analyzer/analyzer.service';
+import { RegisterDto } from './../app/dto/register.dto';
+import { AppLogger } from './../logger/app-logger';
+import { AnalyzerService } from './../analyzer/analyzer.service';
 
 @Processor('analyze')
 export class AnalyzeConsumer {
