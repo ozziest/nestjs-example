@@ -1,4 +1,4 @@
-# Dependency Tracker
+# Outdated Dependencies Resolver
 
 ## Description
 
