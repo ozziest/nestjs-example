@@ -18,7 +18,6 @@ describe('ComposerRegistry', () => {
     cache.set = jest.fn();
 
     const logger = new AppLogger();
-    logger.setContext = jest.fn();
     logger.debug = jest.fn();
 
     registry = new ComposerRegistry(httpService, new SemanticService(), logger, cache);

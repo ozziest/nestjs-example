@@ -10,9 +10,7 @@ export class SubscriptionsService {
   constructor(
     @InjectModel(Subscription.name) private readonly model: Model<Subscription>,
     private readonly logger : AppLogger
-  ) {
-    this.logger.setContext(SubscriptionsService.name)
-  }
+  ) {}
 
   async subscribe(url: string, email: string): Promise<Subscription> {
     let item = await this.getSubscription(url, email);

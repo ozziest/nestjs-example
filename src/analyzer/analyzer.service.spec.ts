@@ -16,7 +16,6 @@ describe('AnalyzerService', () => {
 
   beforeEach(async () => {
     logger = jest.fn()
-    logger.setContext = jest.fn();
     logger.log = jest.fn();
     logger.debug = jest.fn();
     cache = jest.fn();

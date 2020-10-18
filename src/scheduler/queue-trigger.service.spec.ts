@@ -16,7 +16,6 @@ describe('QueueTriggerService', () => {
     subscriptionService = jest.fn()
     analysisQueue = jest.fn()
     logger = jest.fn()
-    logger.setContext = jest.fn()
     logger.debug = jest.fn()
     service = new QueueTriggerService(subscriptionService, analysisQueue, logger)
   });

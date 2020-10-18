@@ -1,4 +1,4 @@
-import { Injectable, Logger, Scope } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class AppLogger extends Logger {}

@@ -10,9 +10,7 @@ export class AnalyzerService {
     private readonly gitServerFactory: GitServerFactory,
     private readonly registryFactory: RegistryFactory,
     private readonly logger: AppLogger
-  ) {
-    this.logger.setContext(AnalyzerService.name)
-  }
+  ) {}
 
   async analyze(url: string): Promise<Dependency[]> {
     const result: Dependency[] = [];

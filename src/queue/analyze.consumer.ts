@@ -14,7 +14,6 @@ export class AnalyzeConsumer {
     private readonly htmlBuilderService: HtmlBuilderService,
     private readonly logger: AppLogger,
   ) {
-    this.logger.setContext(AnalyzeConsumer.name);
   }
 
   @Process()

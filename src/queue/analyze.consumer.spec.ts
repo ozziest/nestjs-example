@@ -14,7 +14,6 @@ describe('AnalyzeConsumer', () => {
     htmlBuilderService = jest.fn()
     htmlBuilderService.buildReport = jest.fn(() => 'html-content')
     appLogger = jest.fn()
-    appLogger.setContext = jest.fn()
     appLogger.debug = jest.fn()
 
     consumer = new AnalyzeConsumer(reportSenderQueue, analyzerService, htmlBuilderService, appLogger)

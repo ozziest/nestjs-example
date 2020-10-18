@@ -16,7 +16,6 @@ describe('SubscriptionsService', () => {
     model = jest.fn()
     logger = jest.fn()
     logger.debug = jest.fn()
-    logger.setContext = jest.fn()
 
     const module = await Test.createTestingModule({
         providers: [

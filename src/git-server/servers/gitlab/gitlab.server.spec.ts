@@ -16,7 +16,6 @@ describe('GitLabServer', () => {
     cache.set = jest.fn();
 
     const logger = new AppLogger();
-    logger.setContext = jest.fn();
     logger.debug = jest.fn();
 
     server = new GitLabServer(httpService, logger, cache, 'owner/repository');

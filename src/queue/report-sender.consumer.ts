@@ -11,7 +11,6 @@ export class ReportSenderConsumer {
     private readonly mailerService: MailerService,
     private readonly logger: AppLogger,
   ) {
-    this.logger.setContext(ReportSenderConsumer.name);
   }
 
   @Process()

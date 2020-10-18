@@ -15,7 +15,6 @@ export class ComposerRegistry implements Registry {
     private readonly logger: AppLogger,
     @Inject(CACHE_MANAGER) private readonly cache,
   ) {
-    this.logger.setContext(ComposerRegistry.name);
     this.packageFileName = 'composer.json';
   }
 

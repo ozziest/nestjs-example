@@ -7,6 +7,7 @@ import { AnalyzerModule } from 'src/analyzer/analyzer.module';
 import { QueueTriggerService } from './queue-trigger.service';
 import { ConfigModule } from '@nestjs/config';
 import { QueueAnalyze } from './../app/constants.service';
+import { SchedulerLogger } from './scheduler.logger';
 
 @Module({
   imports: [
@@ -19,12 +20,11 @@ import { QueueAnalyze } from './../app/constants.service';
       },
     }),
     QueueModule,
-    LoggerModule,
     AnalyzerModule,
     DataModule
   ],
   controllers: [],
-  providers: [QueueTriggerService],
+  providers: [QueueTriggerService, SchedulerLogger],
   exports: [QueueTriggerService],
 })
 export class SchedulerModule {}

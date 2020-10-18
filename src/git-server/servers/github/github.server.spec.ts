@@ -16,7 +16,6 @@ describe('GitHubServer', () => {
     cache.set = jest.fn();
 
     const logger = new AppLogger();
-    logger.setContext = jest.fn();
     logger.debug = jest.fn();
 
     server = new GitHubServer(httpService, logger, cache, 'owner/repository');

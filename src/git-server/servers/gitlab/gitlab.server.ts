@@ -11,7 +11,6 @@ export class GitLabServer implements GitServer {
     @Inject(CACHE_MANAGER) private readonly cache,
     repository: string,
   ) {
-    this.logger.setContext(GitLabServer.name);
     this.repository = repository;
   }
 

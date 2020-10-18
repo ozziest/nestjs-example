@@ -18,7 +18,6 @@ describe('NpmRegistry', () => {
     cache.set = jest.fn();
 
     const logger = new AppLogger();
-    logger.setContext = jest.fn();
     logger.debug = jest.fn();
 
     registry = new NpmRegistry(httpService, new SemanticService(), logger, cache);

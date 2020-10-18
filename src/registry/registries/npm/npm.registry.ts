@@ -15,7 +15,6 @@ export class NpmRegistry implements Registry {
     private readonly logger: AppLogger,
     @Inject(CACHE_MANAGER) private readonly cache,
   ) {
-    this.logger.setContext(NpmRegistry.name);
     this.packageFileName = 'package.json';
   }
 
