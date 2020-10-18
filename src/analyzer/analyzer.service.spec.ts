@@ -1,9 +1,9 @@
 import { HttpService } from '@nestjs/common';
-import { GitHubServer } from './../git-server/servers/github.server';
+import { GitHubServer } from './../git-server/servers/github/github.server';
 import { GitServerFactory } from './../git-server/git-server.factory';
 import { RegistryFactory } from './../registry/registery.factory';
 import { AnalyzerService } from './analyzer.service';
-import { NpmRegistry } from './../registry/registries/npm.registry';
+import { NpmRegistry } from './../registry/registries/npm/npm.registry';
 import { Dependency } from './../registry/dependency.interface';
 import { AppLogger } from './../logger/app-logger';
 

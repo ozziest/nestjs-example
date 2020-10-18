@@ -1,6 +1,6 @@
 import { CACHE_MANAGER, HttpService, Inject } from '@nestjs/common';
-import { AppLogger } from './../../logger/app-logger';
-import { GitServer } from '../git-server.interface';
+import { AppLogger } from './../../../logger/app-logger';
+import { GitServer } from '../../git-server.interface';
 
 export class GitHubServer implements GitServer {
   repository: string;

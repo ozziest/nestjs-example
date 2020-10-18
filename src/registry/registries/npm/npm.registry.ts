@@ -1,7 +1,7 @@
 import { CACHE_MANAGER, HttpService, Inject } from '@nestjs/common';
-import { AppLogger } from './../../logger/app-logger';
-import { Dependency } from '../dependency.interface';
-import { Registry } from '../registry.interface';
+import { AppLogger } from './../../../logger/app-logger';
+import { Dependency } from '../../dependency.interface';
+import { Registry } from '../../registry.interface';
 import { NpmStructure } from './npm.structure';
 
 export class NpmRegistry implements Registry {

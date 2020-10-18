@@ -3,7 +3,7 @@ import { NpmRegistry } from './npm.registry';
 import { NpmStructure } from './npm.structure';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
-import { AppLogger } from './../../logger/app-logger';
+import { AppLogger } from './../../../logger/app-logger';
 
 describe('NpmRegistry', () => {
   let registry: NpmRegistry;

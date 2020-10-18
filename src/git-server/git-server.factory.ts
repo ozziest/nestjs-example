@@ -1,7 +1,7 @@
 import { CACHE_MANAGER, HttpService, Inject, Injectable } from '@nestjs/common';
 import { AppLogger } from './../logger/app-logger';
 import { GitServer } from './git-server.interface';
-import { GitHubServer } from './servers/github.server';
+import { GitHubServer } from './servers/github/github.server';
 
 @Injectable()
 export class GitServerFactory {

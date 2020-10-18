@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/common';
 import { of } from 'rxjs';
 import { GitHubServer } from './github.server';
 import { AxiosResponse } from 'axios';
-import { AppLogger } from './../../logger/app-logger';
+import { AppLogger } from './../../../logger/app-logger';
 
 describe('GitHubServer', () => {
   let server: GitHubServer;
