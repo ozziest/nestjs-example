@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Dependency Reporter</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Dependency Reporter Results</h1>
+      <h4>Repository: {{ request.url }}</h4>
+      <ul>
+        {{#each report}}
+          <li>
+            <b>{{ this.name }}</b> is outdated (Current: {{ this.currentVersion }}, Latest: {{ this.lastVersion }}).
+          </li>
+        {{/each}}
+      </ul>
+
+      <br><br><br>
+      <a href="/">Try Again</a>
+    </div>
+  </body>
+</html>
