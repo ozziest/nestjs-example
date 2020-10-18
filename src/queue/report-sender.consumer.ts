@@ -3,8 +3,9 @@ import { Job } from 'bull';
 import { AppLogger } from './../logger/app-logger';
 import { ReportSenderDto } from './dto/report-sender.dto';
 import { MailerService } from '@nestjs-modules/mailer';
+import { QueueReportSender } from 'src/app/constants.service';
 
-@Processor('report-sender')
+@Processor(QueueReportSender)
 export class ReportSenderConsumer {
   constructor(
     private readonly mailerService: MailerService,

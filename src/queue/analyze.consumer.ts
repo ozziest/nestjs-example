@@ -3,12 +3,13 @@ import { Job, Queue } from 'bull';
 import { AppLogger } from './../logger/app-logger';
 import { AnalyzerService } from './../analyzer/analyzer.service';
 import { HtmlBuilderService } from './../mail/html-builder.service';
-import { SubscriptionDto } from 'src/data/dto/subscription.dto';
+import { SubscriptionDto } from './../data/dto/subscription.dto';
+import { QueueAnalyze, QueueReportSender } from './../app/constants.service';
 
-@Processor('analyze')
+@Processor(QueueAnalyze)
 export class AnalyzeConsumer {
   constructor(
-    @InjectQueue('report-sender') private reportSenderQueue: Queue,
+    @InjectQueue(QueueReportSender) private reportSenderQueue: Queue,
     private readonly analyzerService: AnalyzerService,
     private readonly htmlBuilderService: HtmlBuilderService,
     private readonly logger: AppLogger,

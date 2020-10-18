@@ -14,6 +14,7 @@ import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { MailModule } from 'src/mail/mail.module';
 import { ConfigModule } from '@nestjs/config';
+import { QueueAnalyze } from './constants.service';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { ConfigModule } from '@nestjs/config';
     MongooseModule.forRoot(process.env.MONGO_URI),
     BullModule.registerQueue(
       {
-        name: 'analyze',
+        name: QueueAnalyze,
         redis: {
           host: process.env.REDIS_HOST,
           port: parseInt(process.env.REDIS_PORT),

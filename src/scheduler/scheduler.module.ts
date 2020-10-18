@@ -6,12 +6,13 @@ import { QueueModule } from 'src/queue/queue.module';
 import { AnalyzerModule } from 'src/analyzer/analyzer.module';
 import { QueueTriggerService } from './queue-trigger.service';
 import { ConfigModule } from '@nestjs/config';
+import { QueueAnalyze } from './../app/constants.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     BullModule.registerQueue({
-      name: 'analyze',
+      name: QueueAnalyze,
       redis: {
         host: process.env.REDIS_HOST,
         port: parseInt(process.env.REDIS_PORT),
@@ -20,7 +21,7 @@ import { ConfigModule } from '@nestjs/config';
     QueueModule,
     LoggerModule,
     AnalyzerModule,
-    DataModule,
+    DataModule
   ],
   controllers: [],
   providers: [QueueTriggerService],

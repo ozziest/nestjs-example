@@ -6,12 +6,13 @@ import { ReportSenderConsumer } from './report-sender.consumer';
 import { BullModule } from '@nestjs/bull';
 import { MailModule } from 'src/mail/mail.module';
 import { ConfigModule } from '@nestjs/config';
+import { QueueReportSender } from 'src/app/constants.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     BullModule.registerQueue({
-      name: 'report-sender',
+      name: QueueReportSender,
       redis: {
         host: process.env.REDIS_HOST,
         port: parseInt(process.env.REDIS_PORT),

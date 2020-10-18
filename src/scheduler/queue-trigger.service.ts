@@ -4,19 +4,20 @@ import { Interval } from '@nestjs/schedule';
 import { Queue } from 'bull';
 import * as moment from 'moment';
 import { SubscriptionsService } from './../data/subscription.service';
+import { AnalyzerPeriod, AnalyzerTimeout, QueueAnalyze } from './../app/constants.service';
 
 @Injectable()
 export class QueueTriggerService {
   constructor(
     private readonly subscriptionService: SubscriptionsService,
-    @InjectQueue('analyze') private analysisQueue: Queue,
+    @InjectQueue(QueueAnalyze) private analysisQueue: Queue
   ) {}
 
-  @Interval(1000 * 60 * 60)
+  @Interval(AnalyzerTimeout)
   async handleInterval() {
     const result = await this.subscriptionService.getByTimes(
       parseInt(moment().format('HH')),
-      parseInt(moment().add(1, 'hours').format('HH'))
+      parseInt(moment().add(AnalyzerPeriod, 'minutes').format('HH'))
     );
     const groups = this.toGroupList(result);
 

@@ -3,12 +3,13 @@ import { Body, Controller, Get, Post, Render } from '@nestjs/common';
 import { Queue } from 'bull';
 import { SubscriptionDto } from 'src/data/dto/subscription.dto';
 import { SubscriptionsService } from 'src/data/subscription.service';
+import { QueueAnalyze } from './constants.service';
 import { RegisterDto } from './dto/register.dto';
 
 @Controller()
 export class AppController {
   constructor(
-    @InjectQueue('analyze') private analysisQueue: Queue,
+    @InjectQueue(QueueAnalyze) private analysisQueue: Queue,
     private readonly subscriptionService: SubscriptionsService,
   ) { }
 
