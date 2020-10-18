@@ -5,14 +5,16 @@ import { LoggerModule } from 'src/logger/logger.module';
 import { QueueModule } from 'src/queue/queue.module';
 import { AnalyzerModule } from 'src/analyzer/analyzer.module';
 import { QueueTriggerService } from './queue-trigger.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     BullModule.registerQueue({
       name: 'analyze',
       redis: {
-        host: 'localhost',
-        port: 6379,
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT),
       },
     }),
     QueueModule,

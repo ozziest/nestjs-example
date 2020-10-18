@@ -13,35 +13,37 @@ import { QueueModule } from 'src/queue/queue.module';
 import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { MailModule } from 'src/mail/mail.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     ScheduleModule.forRoot(),
     CacheModule.register({
       store: redisStore,
     }),
-    MongooseModule.forRoot('mongodb://localhost/test'),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     BullModule.registerQueue(
       {
         name: 'analyze',
         redis: {
-          host: 'localhost',
-          port: 6379,
+          host: process.env.REDIS_HOST,
+          port: parseInt(process.env.REDIS_PORT),
         },
       }
     ),
     MailerModule.forRoot({
       transport: {
-        host: 'smtp.mailgun.org',
-        port: 465,
-        secure: true,
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        secure: process.env.SMTP_IS_SECURE,
         auth: {
-          user: 'ozgur@ozgurmail.net',
-          pass: 'a2b97eb11af3791ee6a20a43d442a612-2fbe671d-78aab731'
+          user: process.env.SMTP_USERNAME,
+          pass: process.env.SMTP_PASSWORD
         },
       },
       defaults: {
-        from:'"Özgür Adem Işıklı" <ozgur@ozgurmail.net>',
+        from: process.env.SMTP_FROM,
       }
     }),
     QueueModule,
