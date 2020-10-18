@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { AppLogger } from './../logger/app-logger';
 import { SubscriptionDto } from './dto/subscription.dto';
 import { Subscription } from './schemas/subscription.schema';
 
@@ -8,12 +9,16 @@ import { Subscription } from './schemas/subscription.schema';
 export class SubscriptionsService {
   constructor(
     @InjectModel(Subscription.name) private readonly model: Model<Subscription>,
-  ) {}
+    private readonly logger : AppLogger
+  ) {
+    this.logger.setContext(SubscriptionsService.name)
+  }
 
   async subscribe(url: string, email: string): Promise<Subscription> {
     let item = await this.getSubscription(url, email);
 
     if (item) {
+      this.logger.debug('There is already a subscription for this repository.')
       return null;
     }
 
@@ -21,7 +26,11 @@ export class SubscriptionsService {
     item.url = url;
     item.email = email;
     item.createdAt = new Date();
-    return item.save();
+    item.save();
+
+    this.logger.debug('Subscription has been created')
+
+    return item
   }
 
   async getSubscription(url: string, email: string): Promise<Subscription> {

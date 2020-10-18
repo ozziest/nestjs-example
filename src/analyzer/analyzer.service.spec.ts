@@ -5,24 +5,24 @@ import { RegistryFactory } from './../registry/registery.factory';
 import { AnalyzerService } from './analyzer.service';
 import { NpmRegistry } from './../registry/registries/npm/npm.registry';
 import { Dependency } from './../registry/dependency.interface';
-import { AppLogger } from './../logger/app-logger';
 
 describe('AnalyzerService', () => {
   let service: AnalyzerService;
   let gitServerFactory: GitServerFactory;
   let registryFactory: RegistryFactory;
-  let logger: AppLogger;
+  let logger;
   let cache;
 
   beforeEach(async () => {
-    logger = new AppLogger();
+    logger = jest.fn()
     logger.setContext = jest.fn();
     logger.log = jest.fn();
+    logger.debug = jest.fn();
     cache = jest.fn();
 
     gitServerFactory = new GitServerFactory(new HttpService(), logger, cache);
     registryFactory = new RegistryFactory(new HttpService(), logger, cache);
-    service = new AnalyzerService(gitServerFactory, registryFactory);
+    service = new AnalyzerService(gitServerFactory, registryFactory, logger);
   });
 
   it('should be able to analyze the repository dependencies"', async () => {

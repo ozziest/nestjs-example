@@ -4,6 +4,8 @@ describe('QueueTriggerService', () => {
   let service: QueueTriggerService;
   let subscriptionService;
   let analysisQueue;
+  let logger;
+
   const subscriptions = [
     { url: 'repo1', email: '1@mail.com' },
     { url: 'repo2', email: '2@mail.com' },
@@ -13,7 +15,10 @@ describe('QueueTriggerService', () => {
   beforeEach(async () => {
     subscriptionService = jest.fn()
     analysisQueue = jest.fn()
-    service = new QueueTriggerService(subscriptionService, analysisQueue)
+    logger = jest.fn()
+    logger.setContext = jest.fn()
+    logger.debug = jest.fn()
+    service = new QueueTriggerService(subscriptionService, analysisQueue, logger)
   });
 
   it('should be able to group subscription by the repository url', async () => {

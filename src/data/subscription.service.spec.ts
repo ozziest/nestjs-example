@@ -1,5 +1,6 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
+import { AppLogger } from './../logger/app-logger';
 import { SubscriptionDto } from './dto/subscription.dto';
 import { Subscription } from './schemas/subscription.schema';
 import { SubscriptionsService } from './subscription.service';
@@ -8,9 +9,13 @@ describe('SubscriptionsService', () => {
   let service: SubscriptionsService;
   let model;
   let item;
+  let logger;
 
   beforeEach(async () => {
     model = jest.fn()
+    logger = jest.fn()
+    logger.debug = jest.fn()
+    logger.setContext = jest.fn()
 
     const module = await Test.createTestingModule({
         providers: [
@@ -19,6 +24,10 @@ describe('SubscriptionsService', () => {
             provide: getModelToken(Subscription.name),
             useValue: model,
           },
+          {
+            provide: AppLogger,
+            useValue: logger
+          }
         ],
       }).compile();
 
