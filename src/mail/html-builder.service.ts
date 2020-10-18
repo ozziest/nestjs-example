@@ -5,6 +5,13 @@ import { Dependency } from 'src/registry/dependency.interface';
 export class HtmlBuilderService {
 
   buildReport (data: Dependency[]): string {
+    if (data.length === 0) {
+      return `
+        <h1>Daily Dependency Report</h1>
+        <p>There is not any outdated repository.</p>
+      `
+    }
+
     let listHtml = '' 
     for (const item of data) {
       listHtml += `<li>

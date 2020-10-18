@@ -14,6 +14,8 @@
           <li>
             <b>{{ this.name }}</b> is outdated (Current: {{ this.currentVersion }}, Latest: {{ this.lastVersion }}).
           </li>
+        {{else}}
+          <li>There is not any outdated repository.</li>
         {{/each}}
       </ul>
 

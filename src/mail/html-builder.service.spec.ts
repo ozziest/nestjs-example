@@ -23,4 +23,9 @@ describe('HtmlBuilderService', () => {
     expect(result).toContain('Current: 1.0.0')
     expect(result).toContain('Latest: 1.0.1')
   });
+
+  it('should be able to create empty dependency report', async () => {
+    const result = builder.buildReport([])
+    expect(result).toContain('There is not any outdated repository')
+  });  
 });
