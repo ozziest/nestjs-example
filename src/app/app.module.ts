@@ -21,13 +21,15 @@ import { MailModule } from 'src/mail/mail.module';
       store: redisStore,
     }),
     MongooseModule.forRoot('mongodb://localhost/test'),
-    BullModule.registerQueue({
-      name: 'analyze',
-      redis: {
-        host: 'localhost',
-        port: 6379,
-      },
-    }),
+    BullModule.registerQueue(
+      {
+        name: 'analyze',
+        redis: {
+          host: 'localhost',
+          port: 6379,
+        },
+      }
+    ),
     MailerModule.forRoot({
       transport: {
         host: 'smtp.mailgun.org',
