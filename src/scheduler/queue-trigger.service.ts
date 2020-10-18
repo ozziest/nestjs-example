@@ -5,14 +5,14 @@ import { Queue } from 'bull';
 import * as moment from 'moment';
 import { SubscriptionsService } from './../data/subscription.service';
 import { AnalyzerPeriod, AnalyzerTimeout, QueueAnalyze } from './../app/constants.service';
-import { SchedulerLogger } from './scheduler.logger';
+import { AppLogger } from './../logger/app-logger';
 
 @Injectable()
 export class QueueTriggerService {
   constructor(
     private readonly subscriptionService: SubscriptionsService,
     @InjectQueue(QueueAnalyze) private analysisQueue: Queue,
-    private readonly logger : SchedulerLogger
+    private readonly logger : AppLogger
   ) {
   }
 
