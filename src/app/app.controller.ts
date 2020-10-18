@@ -1,6 +1,7 @@
 import { InjectQueue } from '@nestjs/bull';
-import { Controller, Get, Post, Render } from '@nestjs/common';
+import { Body, Controller, Get, Post, Render } from '@nestjs/common';
 import { Queue } from 'bull';
+import { SubscriptionDto } from 'src/data/dto/subscription.dto';
 import { SubscriptionsService } from 'src/data/subscription.service';
 import { RegisterDto } from './dto/register.dto';
 
@@ -19,18 +20,18 @@ export class AppController {
 
   @Post('register')
   @Render('success')
-  async postRegister() {
-    const request = new RegisterDto();
-    request.url = 'https://github.com/adonisx/adonisx-cli';
-    request.emails = ['i.ozguradem@gmail.com'];
+  async postRegister(@Body() register: RegisterDto) {
+    const data : SubscriptionDto = {
+      url: register.url,
+      emails: register.emails.split(';')
+    }
 
-    await this.subscriptionService.subscribeAll(request.url, request.emails);
-
-    const task = await this.analysisQueue.add(request);
+    await this.subscriptionService.subscribeAll(data);
+    const task = await this.analysisQueue.add(data);
     const report = await task.finished()
 
     return {
-      request,
+      data,
       report
     };
   }  

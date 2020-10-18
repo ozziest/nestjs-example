@@ -4,6 +4,7 @@ import { RegisterDto } from './../app/dto/register.dto';
 import { AppLogger } from './../logger/app-logger';
 import { AnalyzerService } from './../analyzer/analyzer.service';
 import { HtmlBuilderService } from './../mail/html-builder.service';
+import { SubscriptionDto } from 'src/data/dto/subscription.dto';
 
 @Processor('analyze')
 export class AnalyzeConsumer {
@@ -17,7 +18,7 @@ export class AnalyzeConsumer {
   }
 
   @Process()
-  async transcode(job: Job<RegisterDto>) {
+  async transcode(job: Job<SubscriptionDto>) {
     this.logger.debug('Analyzing dependencies has been started.');
     const report = await this.analyzerService.analyze(job.data.url);
 

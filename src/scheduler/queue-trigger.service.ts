@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 import { Queue } from 'bull';
 import * as moment from 'moment';
-import { RegisterDto } from './../app/dto/register.dto';
+import { SubscriptionDto } from './../data/dto/subscription.dto';
 import { SubscriptionsService } from './../data/subscription.service';
 
 @Injectable()
@@ -22,7 +22,7 @@ export class QueueTriggerService {
     const groups = this.toGroupList(result);
 
     for (const url in groups) {
-      const request = new RegisterDto();
+      const request = new SubscriptionDto();
       request.url = url;
       request.emails = groups[url];
       await this.analysisQueue.add(request);

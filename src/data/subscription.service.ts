@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { SubscriptionDto } from './dto/subscription.dto';
 import { Subscription } from './schemas/subscription.schema';
 
 @Injectable()
@@ -60,9 +61,9 @@ export class SubscriptionsService {
       .exec();
   }
 
-  async subscribeAll(url: string, emails: string[]) {
-    for (const email of emails) {
-      await this.subscribe(url, email);
+  async subscribeAll(data : SubscriptionDto) {
+    for (const email of data.emails) {
+      await this.subscribe(data.url, email);
     }
   }
 }

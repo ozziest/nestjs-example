@@ -1,4 +1,4 @@
 export class RegisterDto {
   url: string;
-  emails: string[];
+  emails: string;
 }
